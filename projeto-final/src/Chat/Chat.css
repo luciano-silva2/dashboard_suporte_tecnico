@@ -1,0 +1,87 @@
+@media (prefers-color-scheme: light) {
+  :root {
+    --text: #1a0605;
+    --background: #fbf9f9;
+    --primary: #a47774;
+    --secondary: #c1c4b4;
+    --accent: #66f63f;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #fae6e5;
+    --background: #060404;
+    --primary: #8b5e5b;
+    --secondary: #474a3a;
+    --accent: #30be09;
+  }
+}
+body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background: var(--background);
+    color: var(--text);
+}
+header{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    background-color: var(--primary);
+}
+header div{
+    height: 100%;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+header div:last-child{
+    display: flex;
+    justify-content: end;
+}
+header div:last-child button{
+    height: 50px;
+    width: 200px;
+    background-color: var(--accent);
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+  .ChatSideBar{
+      display: flex;
+      width: 25vw;
+      border: 2px solid var(--secondary);
+      height: 85vh;
+      flex-direction: column;   
+  }
+  .ChatContainer{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .contatos{
+    list-style: none;
+  }
+  .contato{
+    display:flex;
+    height: 70px;
+    width: 95%;
+    border: 1px solid var(--secondary);
+    align-items: center;
+  }
+  .ChatAlive{
+    width: 65vw;
+    display: flex;
+    justify-content: center;
+  }
+  .Chat{
+    height: 90vh;
+    width: 90%;
+    border: 1px solid var(--secondary);
+  }
