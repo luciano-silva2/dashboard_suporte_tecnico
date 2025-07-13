@@ -1,4 +1,7 @@
 import React from "react";
+
+import Logout from "../../Logout/Logout";
+
 import "../../Chat.css";
 function Header(){
     return(
@@ -8,7 +11,7 @@ function Header(){
                     Ghat
                 </div>
                 <div>
-                    <button>Log-out</button>
+                    <Logout />
                 </div>
             </div>
         </header>
