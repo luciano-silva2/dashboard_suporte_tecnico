@@ -85,3 +85,18 @@ header div:last-child button{
     width: 90%;
     border: 1px solid var(--secondary);
   }
+  .login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    width: 240px;
+    background-color: var(--secondary);
+  }
+  .cont-Login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    width: 90%;
+  }
