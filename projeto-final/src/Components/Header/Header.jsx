@@ -1,7 +1,7 @@
-export default function Header(){
-    return(
-        <div style={{ border: '2px solid black', padding: '10px' }}>
+export default function Header() {
+    return (
+        <div className="border border-dark bg-secondary text-white p-3 text-center">
             Header
         </div>
-    )
+    );
 }
