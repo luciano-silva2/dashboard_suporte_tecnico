@@ -1,12 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 import Sidebar from './Components/Sidebar/Sidebar';
 import Home from "./Pages/Home/Home";
+import Tickets from "./Pages/Tickets/Tickets";
 
 
 function App() {
   return (
+
     <Router>
       <Header />
       <Sidebar />
@@ -14,11 +16,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/filtros" element={<Home />} />
+          <Route path="/tickets" element={<Tickets />} />
           <Route path="/configuracoes" element={<Home />} />
         </Routes>
       </div>
       <Footer />
     </Router>
+
   );
 }
 
