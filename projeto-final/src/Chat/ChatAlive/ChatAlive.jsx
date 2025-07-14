@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore"
+import { addDoc, collection, serverTimestamp, getDocs } from "firebase/firestore"
 import { firestore } from "../Chat";
 import { auth } from "../Chat";
 
@@ -9,20 +9,24 @@ function ChatAlive(){
 
     const [novaMensagem, setNovaMensagem] = useState("");
 
+    const [msgs, setMsgs] = useState([])
     const ReferenciaDeMensagens = collection(firestore, "mensagens")
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(novaMensagem)
-        if(novaMensagem === "") return;
+        if(novaMensagem.trim() === "") return;
+        try{
+            await addDoc(ReferenciaDeMensagens, {
+                usuario : auth.currentUser.displayName,
+                msg : novaMensagem,
+                horaEnviada : serverTimestamp(),
 
-        await addDoc(ReferenciaDeMensagens, {
-            usuario : auth.currentUser.displayName,
-            msg : novaMensagem,
-            horaEnviada : serverTimestamp(),
-
-        });
-
+            });
+        }
+        catch(e){
+            console.error("Algo deu errado, aqui vai o erro: " + e)
+        }
         setNovaMensagem("")
 
     }
