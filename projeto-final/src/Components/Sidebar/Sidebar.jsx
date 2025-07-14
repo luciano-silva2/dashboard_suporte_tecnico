@@ -29,6 +29,9 @@ export default function Sidebar() {
                         <Link className="nav-link text-white" to="/filtros">Filtros</Link>
                     </li>
                     <li className="nav-item">
+                        <Link className="nav-link text-white" to="/tickets">Tickets</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link className="nav-link text-white" to="/configuracoes">Configurações</Link>
                     </li>
                 </ul>

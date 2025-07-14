@@ -4,13 +4,23 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Chat from './Chat/Chat';
+import Header from './Components/Header/Header';
+import Footer from './Components/Footer/Footer';
+import Sidebar from './Components/Sidebar/Sidebar';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Chat />
+  <BrowserRouter>
+    <React.StrictMode>
+      <div>
+        <Header />
+        <Sidebar />
+        <Footer />
+      </div>
+    </React.StrictMode>
 
-  </React.StrictMode>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
