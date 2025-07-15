@@ -32,7 +32,13 @@ export default function Sidebar() {
                         <Link className="nav-link text-white" to="/tickets">Tickets</Link>
                     </li>
                     <li className="nav-item">
+                        <Link className="nav-link text-white" to="/chat">Chat</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link className="nav-link text-white" to="/configuracoes">Configurações</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link text-white" to="/graficos">Gráficos</Link>
                     </li>
                 </ul>
             )}

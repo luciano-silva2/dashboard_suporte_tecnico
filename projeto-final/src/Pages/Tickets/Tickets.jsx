@@ -1,4 +1,5 @@
 export default function Tickets() {
+    console.log('Tickets acessados')
     return (
         <div>
             <h2>📋 Lista de Tickets</h2>
