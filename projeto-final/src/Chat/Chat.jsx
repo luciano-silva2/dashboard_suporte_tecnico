@@ -63,3 +63,4 @@ function Chat(){
 export default Chat;
 export { auth }; 
 export { firestore };
+export const db = getFirestore(app)
