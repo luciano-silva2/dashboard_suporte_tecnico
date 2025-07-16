@@ -1,5 +1,5 @@
 import Header from "./ChatComponentes/Header/Header";
-import ChatSideBar from "./ChatComponentes/ChatSideBar/ChatSideBar";
+import ChatSideBar from "./ChatAlive/ChatSideBar/ChatSideBar";
 import ChatAlive from "./ChatAlive/ChatAlive";
 import Login from "./Login/Login"
 import "./Chat.css";
