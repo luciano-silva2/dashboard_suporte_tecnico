@@ -14,10 +14,12 @@ function ChatSideBar(){
                 id : doc.id,
                 ...doc.data()
             }))
-            // const usuariosFiltrados = usuariosCarregados.filter((e) => (
-
-            // ))
-            setUsuarios(usuariosCarregados)
+                const usuariosUnicos = [
+                    ...new Map(
+                        usuariosCarregados.map(u => [u.usuario, u])
+                    ).values()
+                    ];
+            setUsuarios(usuariosUnicos)
         })
         return () => desconectar();
     })
