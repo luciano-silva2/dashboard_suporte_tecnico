@@ -1,4 +1,3 @@
-import Header from "./ChatComponentes/Header/Header";
 import ChatSideBar from "./ChatAlive/ChatSideBar/ChatSideBar";
 import ChatAlive from "./ChatAlive/ChatAlive";
 import Login from "./Login/Login"
@@ -44,7 +43,6 @@ function Chat(){
 
   return(
     <div>
-      <Header />
         <div className="ChatContainer">
           {user? (
             <>

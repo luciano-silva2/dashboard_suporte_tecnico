@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addDoc, collection, serverTimestamp, onSnapshot } from "firebase/firestore"
+import { addDoc, collection, serverTimestamp, onSnapshot, orderBy, query } from "firebase/firestore"
 import { firestore } from "../Chat";
 import { auth } from "../Chat";
  
@@ -8,7 +8,10 @@ function ChatAlive(){
 
     const [novaMensagem, setNovaMensagem] = useState("");
     const [msgs , setMsgs] = useState([])
-    const ReferenciaDeMensagens = collection(firestore, "mensagens")
+    const ReferenciaDeMensagens = query(
+        collection(firestore, "mensagens"),
+        orderBy("horaEnviada")
+    )
 
     useEffect(() => {
         const desconectar = onSnapshot(ReferenciaDeMensagens, (snapshot) => {
