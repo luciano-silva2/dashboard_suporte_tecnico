@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from '../../Chat/Chat';
-import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 
 export default function Tickets() {
     const [ticket, setTicket] = useState('')
@@ -30,7 +30,7 @@ export default function Tickets() {
         }
     };
 
-
+    // Exibição dos tickets em tempo real
     useEffect(() => {
 
         const unsubscribe = onSnapshot(collection(db, 'tickets'), (snapshot) => {
@@ -64,6 +64,17 @@ export default function Tickets() {
         // buscarDados()
         return ()=> unsubscribe()
     }, [])
+
+    const excluirTicket = async (id) =>{
+        try{
+            await deleteDoc(doc(db, 'tickets', id))
+            alert('ticket excluido com sucesso')
+        }catch (erro) {
+            console.log(erro)
+        }
+
+
+    }
     return (
         <div>
             <form onSubmit={salvarDados}>
@@ -94,7 +105,8 @@ export default function Tickets() {
             <ul>
                 {tickets.map((ticket) => (
                     <li key={ticket.id}>
-                        <strong>{ticket.nome}</strong>: {ticket.problema} - <em>{ticket.prioridade}</em>
+                        <strong>{ticket.nome}</strong>: {ticket.problema} - <em>{ticket.prioridade}</em> 
+                        <button onClick={() => excluirTicket(ticket.id)}>Excluir Ticket</button>
                     </li>
                 ))}
             </ul>
