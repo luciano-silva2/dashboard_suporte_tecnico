@@ -6,6 +6,7 @@ import {
   onSnapshot,
   deleteDoc,
   doc,
+  updateDoc,
 } from 'firebase/firestore';
 import { useTable, usePagination, useSortBy } from "react-table";
 import Select from 'react-select';
@@ -59,6 +60,21 @@ export default function Tickets() {
     }
   }, []);
 
+
+
+
+
+
+
+  const atualizarCampo = useCallback(async (id, campo, valor) => {
+    try {
+      const ref = doc(db, 'tickets', id);
+      await updateDoc(ref, { [campo]: valor });
+    } catch (erro) {
+      console.error(`Erro ao atualizar ${campo}:`, erro);
+    }
+  }, []);
+
   const ticketsFiltrados = useMemo(() => {
     return filtrarTickets(tickets, {
       searchTerm,
@@ -73,10 +89,36 @@ export default function Tickets() {
   const columns = useMemo(() => [
     { Header: "Nome", accessor: "nome" },
     { Header: "Problema", accessor: "problema" },
-    { Header: "Prioridade", accessor: "prioridade" },
-    { Header: "Status", accessor: "status" },
+    {
+      Header: "Prioridade",
+      accessor: "prioridade",
+      Cell: ({ row, value }) => (
+        <Select
+          value={prioridades.find(opt => opt.value === value)}
+          onChange={selected => atualizarCampo(row.original.id, 'prioridade', selected.value)}
+          options={prioridades}
+          classNamePrefix="react-select"
+        />
+      ),
+    },
+    {
+      Header: "Status",
+      accessor: "status",
+      Cell: ({ row, value }) => (
+        <Select
+          value={statusOptions.find(opt => opt.value === value)}
+          onChange={selected => atualizarCampo(row.original.id, 'status', selected.value)}
+          options={statusOptions}
+          classNamePrefix="react-select"
+        />
+      ),
+    },
     { Header: "Técnico", accessor: "tecnico" },
-    { Header: "Data", accessor: "data", Cell: ({ value }) => value?.toLocaleDateString?.() },
+    {
+      Header: "Data",
+      accessor: "data",
+      Cell: ({ value }) => value?.toLocaleDateString?.()
+    },
     {
       Header: "Ações",
       accessor: "id",
@@ -84,7 +126,7 @@ export default function Tickets() {
         <button className="btn btn-danger btn-sm" onClick={() => excluirTicket(value)}>Excluir</button>
       ),
     },
-  ], [excluirTicket]);
+  ], [atualizarCampo, excluirTicket]);
 
   const {
     getTableProps,
