@@ -8,8 +8,9 @@ function ChatAlive(){
 
     const [novaMensagem, setNovaMensagem] = useState("");
     const [msgs , setMsgs] = useState([])
+    const mensagemRef = collection(firestore, "mensagens")
     const ReferenciaDeMensagens = query(
-        collection(firestore, "mensagens"),
+        mensagemRef,
         orderBy("horaEnviada")
     )
 
@@ -32,7 +33,7 @@ function ChatAlive(){
         console.log(novaMensagem)
         if(novaMensagem.trim() === "") return;
         try{
-            await addDoc(ReferenciaDeMensagens, {
+            await addDoc(mensagemRef, {
                 usuario : auth.currentUser.displayName,
                 msg : novaMensagem,
                 horaEnviada : serverTimestamp(),
