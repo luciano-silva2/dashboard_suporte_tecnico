@@ -1,3 +1,7 @@
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { saveAs } from 'file-saver';
+
 export const prioridades = [
   { value: 'urgente', label: 'Urgente' },
   { value: 'alta', label: 'Alta' },
@@ -41,4 +45,32 @@ export function filtrarTickets(tickets, filtros) {
 
     return matchesSearch && matchesStatus && matchesPrioridade && matchesData && matchesTecnico;
   });
+}
+
+
+export function exportarCSV(tickets) {
+  const cabecalho = ["Nome", "Problema", "Prioridade", "Status", "Técnico", "Data"];
+  const linhas = tickets.map(t => [
+    t.nome,
+    t.problema,
+    t.prioridade,
+    t.status,
+    t.tecnico,
+    t.data?.toLocaleDateString?.() || ''
+  ]);
+
+  const csvContent = [
+    cabecalho.join(","),
+    ...linhas.map(linha => linha.map(escapeCSV).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  saveAs(blob, 'tickets.csv');
+}
+
+function escapeCSV(valor) {
+  if (typeof valor === 'string' && (valor.includes(',') || valor.includes('"') || valor.includes('\n'))) {
+    return `"${valor.replace(/"/g, '""')}"`;
+  }
+  return valor;
 }
