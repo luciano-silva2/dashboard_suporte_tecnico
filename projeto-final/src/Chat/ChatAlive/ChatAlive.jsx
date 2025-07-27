@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addDoc, collection, serverTimestamp, onSnapshot, orderBy, query } from "firebase/firestore"
-import { firestore } from "../Chat";
-import { auth } from "../Chat";
+import { firestore } from "../../Firebase/firebase";
+import { auth } from "../../Firebase/firebase";
  
 function ChatAlive(){
 

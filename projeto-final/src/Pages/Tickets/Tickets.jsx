@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { db } from '../../Chat/Chat';
-import { collection, addDoc, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
-import { useTable } from "react-table";
+
+// import React, { useState, useEffect, useMemo, useCallback } from "react";
+// import { db } from '../../Chat/Chat';
+// import { collection, addDoc, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
+// import { useTable } from "react-table";
+import { useState, useEffect } from "react";
+import { db } from '../../Firebase/firebase';
+import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 
 export default function Tickets() {
   const [tickets, setTickets] = useState([]);

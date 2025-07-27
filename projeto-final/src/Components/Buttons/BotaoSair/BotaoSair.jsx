@@ -1,4 +1,4 @@
-import { auth } from "../../../Chat/Chat";
+import { auth } from "../../../Firebase/firebase";
 export default function BotaoSair() {
         
     return (
