@@ -3,11 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../Firebase/firebase';
 import {
   collection,
-  addDoc,
   onSnapshot,
   deleteDoc,
   doc,
-  Timestamp,
 } from 'firebase/firestore';
 import { useTable, usePagination, useSortBy } from "react-table";
 import Select from 'react-select';
@@ -25,12 +23,6 @@ export default function Tickets() {
   const navigate = useNavigate();
 
   const [tickets, setTickets] = useState([]);
-  const [nome, setNome] = useState('');
-  const [problema, setProblema] = useState('');
-  const [prioridade, setPrioridade] = useState(null);
-  const [status, setStatus] = useState(null);
-  const [tecnico, setTecnico] = useState(null);
-  const [dataCriacao, setDataCriacao] = useState(new Date());
   const [searchInput, setSearchInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filtroStatus, setFiltroStatus] = useState(null);
