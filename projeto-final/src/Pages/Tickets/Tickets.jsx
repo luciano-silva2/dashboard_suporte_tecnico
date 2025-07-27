@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
-import { db } from '../../Chat/Chat';
-import { collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc } from 'firebase/firestore';
+
+import { db } from '../../Firebase/firebase';
+import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
+
+
+
 
 export default function Tickets() {
     const [ticket, setTicket] = useState('')

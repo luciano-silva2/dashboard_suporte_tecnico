@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot, Firestore, addDoc } from "firebase/firestore"
-import { firestore } from "../../Chat";
+import { firestore } from "../../../Firebase/firebase.jsx";
 import "../../Chat.css";
 function ChatSideBar(){
 
