@@ -9,7 +9,7 @@ function ChatSideBar(){
     const RefUsuarios = collection(firestore, "mensagens");
     const RefTickets = collection(firestore, "tickets");
     useEffect(() => {
-        const desconectar = onSnapshot(RefUsuarios, snapshot => {
+        const desconectar = onSnapshot(RefTickets, snapshot => {
             const usuariosCarregados = snapshot.docs.map( doc => ({
                 id : doc.id,
                 ...doc.data()
@@ -23,17 +23,7 @@ function ChatSideBar(){
         })
         return () => desconectar();
     })
-    const lidarComSubmit = async (e) => {
-        e.preventDefault();
-        try{
-            await addDoc(RefTickets, {
-                reclamacao : "Preciso de ajuda",
-            });
-        }
-        catch(error){
-            console.log("Algo deu errado tentand criar o ticket, segue o erro" + error)
-        }
-    }
+    
 
 
     return(
@@ -41,15 +31,9 @@ function ChatSideBar(){
         className="ChatSideBar">
 
             <ul className="contatos">
-                <li className="addMsg">
-                    <button
-                    onClick={lidarComSubmit}>
-                        Começar uma conversa
-                    </button>
-                </li>
                 {usuarios.map(({ id, usuario}) => (
                     <li key={id} className="divMsg">
-                        {usuario}
+                        {id}
                     </li>
                 ))}
                 <li 

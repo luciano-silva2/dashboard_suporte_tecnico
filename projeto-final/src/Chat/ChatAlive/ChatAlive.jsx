@@ -34,6 +34,7 @@ function ChatAlive(){
         if(novaMensagem.trim() === "") return;
         try{
             await addDoc(mensagemRef, {
+                ticket : "kkk" ,
                 usuario : auth.currentUser.displayName,
                 msg : novaMensagem,
                 horaEnviada : serverTimestamp(),
