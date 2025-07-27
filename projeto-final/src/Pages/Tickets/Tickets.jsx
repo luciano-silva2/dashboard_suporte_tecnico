@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db } from '../../Chat/Chat';
+import { db } from '../../Firebase/firebase';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 
 export default function Tickets() {
