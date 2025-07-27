@@ -1,10 +1,12 @@
+import React, { Suspense, lazy } from "react";
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 import Sidebar from './Components/Sidebar/Sidebar';
 import Home from "./Pages/Home/Home";
-import Tickets from "./Pages/Tickets/Tickets";
 import Chat from './Chat/Chat';
 import { Routes, Route } from "react-router-dom";
+
+const Tickets = lazy(() => import("./Pages/Tickets/Tickets"));
 
 function App() {
   return (
@@ -15,7 +17,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/filtros" element={<Home />} />
-          <Route path="/tickets" element={<Tickets />} />
+          <Route path="/tickets" element={
+            <Suspense fallback={<div>Carregando tickets...</div>}>
+              <Tickets />
+            </Suspense>
+          } />
           <Route path="/configuracoes" element={<Home />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/graficos" element={<Home />} />
