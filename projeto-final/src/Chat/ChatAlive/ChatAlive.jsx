@@ -6,7 +6,8 @@ import { auth } from "../../Firebase/firebase";
 function ChatAlive({ ticketId }) {
     const [novaMensagem, setNovaMensagem] = useState("");
     const [msgs, setMsgs] = useState([]);
-    const [msg, setMsg] = useState(null);
+    
+    
 
 
     const mensagemRef = collection(firestore, "mensagens");
@@ -19,10 +20,19 @@ function ChatAlive({ ticketId }) {
 
         const q = query(colecaoMensagens, where("ticket", "==", ticketId));
         const unsubscribe = onSnapshot(q, (snapshot) => {
+            const mensagens = [];
             snapshot.forEach((doc) => {
-                    console.log("Mensagem: ", doc.data().msg);
-                    setMsg(doc.data().msg);
-                    msgs.push(msg);
+                const dados = doc.data();
+                const mensagemComId = {
+                    id : doc.id,
+                    ...dados,
+                }
+                mensagens.push(mensagemComId);
+                setMsgs(mensagens);
+
+                console.log("Mensagem: ", doc.data().msg);
+                    // setMsg(doc.data().msg);
+                    // msgs.push(msg);
                 });
 
             });
