@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db } from '../../Firebase/firebase';
+import { db, auth } from '../../Firebase/firebase';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 
 
@@ -19,7 +19,8 @@ export default function Tickets() {
             await addDoc(collection(db, 'tickets'), {
                 nome: nome,
                 problema: problema,
-                prioridade: prioridade
+                prioridade: prioridade,
+                cliente : auth.currentUser.email,
             });
 
             setNome('');
