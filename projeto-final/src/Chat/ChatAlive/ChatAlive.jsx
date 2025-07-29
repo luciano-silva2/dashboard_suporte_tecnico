@@ -18,7 +18,7 @@ function ChatAlive({ ticketId }) {
 
         const colecaoMensagens = collection(firestore, "mensagens");
 
-        const q = query(colecaoMensagens, where("ticket", "==", ticketId));
+        const q = query(colecaoMensagens, where("ticket", "==", ticketId), orderBy("horaEnviada"));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const mensagens = [];
             setMsgs([]);
@@ -29,12 +29,9 @@ function ChatAlive({ ticketId }) {
                     ...dados,
                 }
                 mensagens.push(mensagemComId);
-                setMsgs(mensagens);
-
                 console.log("Mensagem: ", doc.data().msg);
-                    // setMsg(doc.data().msg);
-                    // msgs.push(msg);
                 });
+            setMsgs(mensagens);
 
             });
 
