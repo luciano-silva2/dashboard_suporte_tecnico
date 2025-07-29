@@ -95,7 +95,17 @@ export default function TicketsExibicao({
         previousPage,
         canNextPage,
         canPreviousPage,
-    } = useTable({ columns, data: ticketsFiltrados }, useSortBy, usePagination);
+        setPageSize,
+        state: { pageIndex, pageSize }
+    } = useTable(
+        {
+            columns,
+            data: ticketsFiltrados,
+            initialState: { pageSize: 5 }
+        },
+        useSortBy,
+        usePagination
+    );
 
     return (
         <div className="container my-4">
@@ -216,13 +226,34 @@ export default function TicketsExibicao({
                 </tbody>
             </table>
 
-            <div className="d-flex justify-content-between my-3">
-                <button className="btn btn-outline-primary" onClick={previousPage} disabled={!canPreviousPage}>
-                    &lt; Anterior
-                </button>
-                <button className="btn btn-outline-primary" onClick={nextPage} disabled={!canNextPage}>
-                    Próxima &gt;
-                </button>
+            <div className="d-flex justify-content-between align-items-center my-3">
+                <div>
+                    <label className="me-2">Tickets por página:</label>
+                    <select
+                        className="form-select d-inline-block w-auto"
+                        value={pageSize}
+                        onChange={e => setPageSize(Number(e.target.value))}
+                    >
+                        {[5, 10, 20, 50].map(size => (
+                            <option key={size} value={size}>
+                                {size}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
+                    Página {pageIndex + 1} de {Math.ceil(ticketsFiltrados.length / pageSize)} ({ticketsFiltrados.length} tickets)
+                </div>
+
+                <div>
+                    <button className="btn btn-outline-primary me-2" onClick={previousPage} disabled={!canPreviousPage}>
+                        &lt; Anterior
+                    </button>
+                    <button className="btn btn-outline-primary" onClick={nextPage} disabled={!canNextPage}>
+                        Próxima &gt;
+                    </button>
+                </div>
             </div>
         </div>
     );
