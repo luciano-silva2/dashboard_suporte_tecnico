@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { db } from '../../Firebase/firebase';
+import { auth, db } from '../../Firebase/firebase';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -18,6 +18,17 @@ export default function CriarTicket() {
   const [dataCriacao, setDataCriacao] = useState(new Date());
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setNome(user.displayName || "Usuário sem nome");
+      setEmail(user.email || "");
+    }
+  }, []);
+
+
+
 
   const salvarDados = async (e) => {
     e.preventDefault();
@@ -43,6 +54,7 @@ export default function CriarTicket() {
     } catch (erro) {
       console.error("Erro ao criar ticket:", erro);
     }
+    console.log(auth)
   };
 
   return (
