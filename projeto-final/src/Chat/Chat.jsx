@@ -12,6 +12,7 @@ import "./Chat.css";
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useState } from "react";
 
 
 
@@ -27,15 +28,15 @@ function Chat(){
 
   
   const [user] = useAuthState(auth);
-
+  const [ticketSelecionado, setTicketSelecionado] = useState(null)
 
   return(
     <div>
         <div className="ChatContainer">
           {user? (
             <>
-            <ChatSideBar />
-            <ChatAlive />
+            <ChatSideBar setTicketSelecionado={ setTicketSelecionado } />
+            {ticketSelecionado && <ChatAlive ticketId={ticketSelecionado} />}
             </>
             )
             : (
