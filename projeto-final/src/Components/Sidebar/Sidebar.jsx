@@ -1,20 +1,26 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../Context/ContextoTema";
 
 export default function Sidebar() {
     const [menu, setMenu] = useState(false);
+    const { theme } = useTheme();
 
-    const toggleMenu = () => {
-        setMenu(!menu);
-    };
+    const toggleMenu = () => setMenu(!menu);
+
+    const bgClass = theme === 'light' ? 'bg-light' : 'bg-dark';
+    const textClass = theme === 'light' ? 'text-dark' : 'text-white';
+    const borderClass = theme === 'light' ? 'border-dark' : 'border-light';
+    const buttonClass = theme === 'light' ? 'btn-dark' : 'btn-light';
+    const linkClass = theme === 'light' ? 'text-dark' : 'text-white';
 
     return (
         <div
-            className={`bg-secondary text-white border border-dark p-3 position-fixed h-100 ${menu ? "col-2" : "col-auto"}`}
+            className={`position-fixed h-100 ${bgClass} ${textClass} ${borderClass} border p-3 ${menu ? "col-2" : "col-auto"}`}
             style={{ top: 0, left: 0, bottom: 0, overflowY: "auto", zIndex: 1000 }}
         >
             <button
-                className="btn btn-dark btn-sm mb-3"
+                className={`btn btn-sm ${buttonClass} mb-3`}
                 onClick={toggleMenu}
             >
                 {menu ? "Fechar Menu" : "Menu"}
@@ -23,22 +29,22 @@ export default function Sidebar() {
             {menu && (
                 <ul className="nav flex-column">
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/">Início</Link>
+                        <Link className={`nav-link ${linkClass}`} to="/">Início</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/filtros">Filtros</Link>
+                        <Link className={`nav-link ${linkClass}`} to="/filtros">Filtros</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/tickets">Tickets</Link>
+                        <Link className={`nav-link ${linkClass}`} to="/tickets">Tickets</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/chat">Chat</Link>
+                        <Link className={`nav-link ${linkClass}`} to="/chat">Chat</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/configuracoes">Configurações</Link>
+                        <Link className={`nav-link ${linkClass}`} to="/configuracoes">Configurações</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/graficos">Gráficos</Link>
+                        <Link className={`nav-link ${linkClass}`} to="/graficos">Gráficos</Link>
                     </li>
                 </ul>
             )}

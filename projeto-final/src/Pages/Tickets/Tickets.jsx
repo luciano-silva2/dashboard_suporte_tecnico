@@ -1,118 +1,96 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate } from 'react-router-dom';
 import { db } from '../../Firebase/firebase';
-import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
-
-
-
+import {
+  collection,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
+import {
+  filtrarTickets
+} from './ticketsUtils';
+import TicketsExibicao from "./TicketsExibicao";
 
 export default function Tickets() {
-    const [ticket, setTicket] = useState('')
-    const [tickets, setTickets] = useState([])
-    const [nome, setNome] = useState('');
-    const [problema, setProblema] = useState('');
-    const [prioridade, setPrioridade] = useState('');
+  const navigate = useNavigate();
 
-    const salvarDados = async (e) => {
-        e.preventDefault();
+  const [tickets, setTickets] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filtroStatus, setFiltroStatus] = useState(null);
+  const [filtroPrioridade, setFiltroPrioridade] = useState(null);
+  const [filtroDataInicial, setFiltroDataInicial] = useState(null);
+  const [filtroDataFinal, setFiltroDataFinal] = useState(null);
+  const [filtroTecnico, setFiltroTecnico] = useState(null);
 
-        try {
-            await addDoc(collection(db, 'tickets'), {
-                nome: nome,
-                problema: problema,
-                prioridade: prioridade
-            });
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchTerm(searchInput.trim().toLowerCase());
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [searchInput]);
 
-            setNome('');
-            setProblema('');
-            setPrioridade('');
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'tickets'), (snapshot) => {
+      const dados = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        data: doc.data().data?.toDate?.() || new Date()
+      }));
+      setTickets(dados);
+    });
+    return () => unsubscribe();
+  }, []);
 
-            alert("Ticket criado com sucesso");
-
-        } catch (erro) {
-            console.log("Erro ao criar ticket:", erro);
-        }
-    };
-
-    // Exibição dos tickets em tempo real
-    useEffect(() => {
-
-        const unsubscribe = onSnapshot(collection(db, 'tickets'), (snapshot) => {
-            const dados = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data()
-
-            }))
-            setTickets(dados)
-        })
-
-
-
-
-
-
-
-        // const buscarDados = async () => {
-        //     try {
-        //         const querySnapshot = await getDocs(collection(db, 'tickets'))
-        //         const dados = querySnapshot.docs.map((doc) => ({
-        //             id: doc.id,
-        //             ...doc.data()
-
-        //         }))
-        //         setTickets(dados)
-        //     } catch (erro) {
-        //         console.log(erro)
-        //     }
-        // }
-        // buscarDados()
-        return ()=> unsubscribe()
-    }, [])
-
-    const excluirTicket = async (id) =>{
-        try{
-            await deleteDoc(doc(db, 'tickets', id))
-            alert('ticket excluido com sucesso')
-        }catch (erro) {
-            console.log(erro)
-        }
-
-
+  const excluirTicket = useCallback(async (id) => {
+    try {
+      await deleteDoc(doc(db, 'tickets', id));
+      alert('Ticket excluído com sucesso');
+    } catch (erro) {
+      console.log(erro);
     }
-    return (
-        <div>
-            <form onSubmit={salvarDados}>
-                <input
-                    type="text"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    placeholder="Digite seu nome"
-                />
+  }, []);
 
-                <input
-                    type="text"
-                    value={problema}
-                    onChange={(e) => setProblema(e.target.value)}
-                    placeholder="Digite seu problema"
-                />
+  const atualizarCampo = useCallback(async (id, campo, valor) => {
+    try {
+      const ref = doc(db, 'tickets', id);
+      await updateDoc(ref, { [campo]: valor });
+    } catch (erro) {
+      console.error(`Erro ao atualizar ${campo}:`, erro);
+    }
+  }, []);
 
-                <input
-                    type="text"
-                    value={prioridade}
-                    onChange={(e) => setPrioridade(e.target.value)}
-                    placeholder="Digite a prioridade do problema"
-                />
+  const ticketsFiltrados = useMemo(() => {
+    return filtrarTickets(tickets, {
+      searchTerm,
+      filtroStatus,
+      filtroPrioridade,
+      filtroDataInicial,
+      filtroDataFinal,
+      filtroTecnico,
+    });
+  }, [tickets, searchTerm, filtroStatus, filtroPrioridade, filtroDataInicial, filtroDataFinal, filtroTecnico]);
 
-                <button type="submit" id="botaoCriarTicket">Criar Ticket</button>
-            </form>
-
-            <ul>
-                {tickets.map((ticket) => (
-                    <li key={ticket.id}>
-                        <strong>{ticket.nome}</strong>: {ticket.problema} - <em>{ticket.prioridade}</em> 
-                        <button onClick={() => excluirTicket(ticket.id)}>Excluir Ticket</button>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <TicketsExibicao
+      navigate={navigate}
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+      filtroStatus={filtroStatus}
+      setFiltroStatus={setFiltroStatus}
+      filtroPrioridade={filtroPrioridade}
+      setFiltroPrioridade={setFiltroPrioridade}
+      filtroDataInicial={filtroDataInicial}
+      setFiltroDataInicial={setFiltroDataInicial}
+      filtroDataFinal={filtroDataFinal}
+      setFiltroDataFinal={setFiltroDataFinal}
+      filtroTecnico={filtroTecnico}
+      setFiltroTecnico={setFiltroTecnico}
+      ticketsFiltrados={ticketsFiltrados}
+      atualizarCampo={atualizarCampo}
+      excluirTicket={excluirTicket}
+    />
+  );
 }
