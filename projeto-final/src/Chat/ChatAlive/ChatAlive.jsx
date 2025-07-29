@@ -21,6 +21,7 @@ function ChatAlive({ ticketId }) {
         const q = query(colecaoMensagens, where("ticket", "==", ticketId));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const mensagens = [];
+            setMsgs([]);
             snapshot.forEach((doc) => {
                 const dados = doc.data();
                 const mensagemComId = {
