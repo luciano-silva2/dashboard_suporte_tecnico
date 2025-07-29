@@ -29,6 +29,7 @@ function App() {
               <Route path="/configuracoes" element={<Home />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/graficos" element={<Home />} />
+              <Route path="/criar-ticket" element={<CriarTicket />} />
             </Routes>
           </div>
           <Footer />
