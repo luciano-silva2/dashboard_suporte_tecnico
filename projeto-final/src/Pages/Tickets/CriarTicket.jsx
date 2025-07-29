@@ -80,6 +80,7 @@ export default function CriarTicket() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu e-mail"
             required
+            readOnly={true}
           />
         </div>
         <div className="col-md-4">
@@ -90,6 +91,7 @@ export default function CriarTicket() {
             onChange={(e) => setProblema(e.target.value)}
             placeholder="Descreva o problema"
             required
+            readOnly={true}
           />
         </div>
       </div>
