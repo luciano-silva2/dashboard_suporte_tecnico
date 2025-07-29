@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTable, usePagination, useSortBy } from "react-table";
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { exportarCSV, exportarPDF, prioridades, statusOptions, tecnicos } from './ticketsUtils';
+import Modal from "./Modal";
 
 export default function TicketsExibicao({
     navigate,
@@ -23,6 +24,9 @@ export default function TicketsExibicao({
     atualizarCampo,
     excluirTicket
 }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTicket, setSelectedTicket] = useState(null);
+
     const columns = useMemo(() => [
         { Header: "Nome", accessor: "nome" },
         { Header: "Problema", accessor: "problema" },
@@ -59,8 +63,24 @@ export default function TicketsExibicao({
         {
             Header: "Ações",
             accessor: "id",
-            Cell: ({ value }) => (
-                <button className="btn btn-danger btn-sm" onClick={() => excluirTicket(value)}>Excluir</button>
+            Cell: ({ row }) => (
+                <div className="d-flex gap-2">
+                    <button
+                        className="btn btn-info btn-sm"
+                        onClick={() => {
+                            setSelectedTicket(row.original);
+                            setIsModalOpen(true);
+                        }}
+                    >
+                        Ver Detalhes
+                    </button>
+                    <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => excluirTicket(row.original.id)}
+                    >
+                        Excluir
+                    </button>
+                </div>
             ),
         },
     ], [atualizarCampo, excluirTicket]);
@@ -75,19 +95,46 @@ export default function TicketsExibicao({
         previousPage,
         canNextPage,
         canPreviousPage,
-    } = useTable({ columns, data: ticketsFiltrados }, useSortBy, usePagination);
+        setPageSize,
+        state: { pageIndex, pageSize }
+    } = useTable(
+        {
+            columns,
+            data: ticketsFiltrados,
+            initialState: { pageSize: 5 }
+        },
+        useSortBy,
+        usePagination
+    );
 
     return (
         <div className="container my-4">
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                {selectedTicket ? (
+                    <div>
+                        <h5>Detalhes do Ticket</h5>
+                        <p><strong>Nome:</strong> {selectedTicket.nome}</p>
+                        <p><strong>Problema:</strong> {selectedTicket.problema}</p>
+                        <p><strong>Prioridade:</strong> {selectedTicket.prioridade}</p>
+                        <p><strong>Status:</strong> {selectedTicket.status}</p>
+                        <p><strong>Técnico:</strong> {selectedTicket.tecnico}</p>
+                        <p><strong>Data:</strong> {selectedTicket.data?.toLocaleDateString()}</p>
+                    </div>
+                ) : (
+                    <p>Nenhum ticket selecionado.</p>
+                )}
+            </Modal>
+
             <div className="d-flex justify-content-end mb-3">
                 <button className="btn btn-success" onClick={() => navigate('/criar-ticket')}>
                     + Novo Ticket
                 </button>
             </div>
+
             <div className="d-flex justify-content-end mb-3">
                 <button className="btn btn-danger" onClick={() => exportarCSV(ticketsFiltrados)}>Exportar CSV</button>
-
             </div>
+
             <div className="mb-4 p-3 border rounded bg-light shadow-sm">
                 <div className="row g-3">
                     <div className="col-md-3">
@@ -179,13 +226,34 @@ export default function TicketsExibicao({
                 </tbody>
             </table>
 
-            <div className="d-flex justify-content-between my-3">
-                <button className="btn btn-outline-primary" onClick={previousPage} disabled={!canPreviousPage}>
-                    &lt; Anterior
-                </button>
-                <button className="btn btn-outline-primary" onClick={nextPage} disabled={!canNextPage}>
-                    Próxima &gt;
-                </button>
+            <div className="d-flex justify-content-between align-items-center my-3">
+                <div>
+                    <label className="me-2">Tickets por página:</label>
+                    <select
+                        className="form-select d-inline-block w-auto"
+                        value={pageSize}
+                        onChange={e => setPageSize(Number(e.target.value))}
+                    >
+                        {[5, 10, 20, 50].map(size => (
+                            <option key={size} value={size}>
+                                {size}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
+                    Página {pageIndex + 1} de {Math.ceil(ticketsFiltrados.length / pageSize)} ({ticketsFiltrados.length} tickets)
+                </div>
+
+                <div>
+                    <button className="btn btn-outline-primary me-2" onClick={previousPage} disabled={!canPreviousPage}>
+                        &lt; Anterior
+                    </button>
+                    <button className="btn btn-outline-primary" onClick={nextPage} disabled={!canNextPage}>
+                        Próxima &gt;
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { prioridades, statusOptions, tecnicos } from './ticketsUtils';
 
 export default function CriarTicket() {
-  const [nome, setNome] = useState('');
+  const [nome, setNome] = useState('Antony');
   const [problema, setProblema] = useState('');
   const [prioridade, setPrioridade] = useState(null);
   const [status, setStatus] = useState(null);
@@ -17,6 +17,7 @@ export default function CriarTicket() {
   const [dataCriacao, setDataCriacao] = useState(new Date());
 
   const navigate = useNavigate();
+
 
   const salvarDados = async (e) => {
     e.preventDefault();
@@ -55,6 +56,7 @@ export default function CriarTicket() {
             onChange={(e) => setNome(e.target.value)}
             placeholder="Digite seu nome"
             required
+            readOnly={true}
           />
         </div>
         <div className="col-md-4">
