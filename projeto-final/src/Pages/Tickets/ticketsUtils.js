@@ -33,25 +33,33 @@ export function filtrarTickets(tickets, filtros) {
   } = filtros;
 
   return tickets.filter(ticket => {
+    const termo = searchTerm?.toLowerCase() || "";
+
+
     const matchesSearch =
-      ticket.nome.toLowerCase().includes(searchTerm) ||
-      ticket.problema.toLowerCase().includes(searchTerm);
+      !termo ||
+      ticket.nome?.toLowerCase().includes(termo) ||
+      ticket.problema?.toLowerCase().includes(termo) ||
+      ticket.email?.toLowerCase().includes(termo);
 
     const matchesStatus = filtroStatus ? ticket.status === filtroStatus.value : true;
     const matchesPrioridade = filtroPrioridade ? ticket.prioridade === filtroPrioridade.value : true;
-    const matchesData = (!filtroDataInicial || ticket.data >= filtroDataInicial) &&
-                        (!filtroDataFinal || ticket.data <= filtroDataFinal);
+    const matchesData =
+      (!filtroDataInicial || ticket.data >= filtroDataInicial) &&
+      (!filtroDataFinal || ticket.data <= filtroDataFinal);
     const matchesTecnico = filtroTecnico ? ticket.tecnico === filtroTecnico.value : true;
 
     return matchesSearch && matchesStatus && matchesPrioridade && matchesData && matchesTecnico;
   });
 }
 
-
 export function exportarCSV(tickets) {
-  const cabecalho = ["Nome", "Problema", "Prioridade", "Status", "Técnico", "Data"];
+
+  const cabecalho = ["Nome", "Email", "Problema", "Prioridade", "Status", "Técnico", "Data"];
+  
   const linhas = tickets.map(t => [
     t.nome,
+    t.email || '',
     t.problema,
     t.prioridade,
     t.status,
@@ -72,5 +80,5 @@ function escapeCSV(valor) {
   if (typeof valor === 'string' && (valor.includes(',') || valor.includes('"') || valor.includes('\n'))) {
     return `"${valor.replace(/"/g, '""')}"`;
   }
-  return valor;
+  return valor ?? '';
 }

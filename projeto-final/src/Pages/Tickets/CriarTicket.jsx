@@ -10,6 +10,7 @@ import { prioridades, statusOptions, tecnicos } from './ticketsUtils';
 
 export default function CriarTicket() {
   const [nome, setNome] = useState('Antony');
+  const [email, setEmail] = useState('');
   const [problema, setProblema] = useState('');
   const [prioridade, setPrioridade] = useState(null);
   const [status, setStatus] = useState(null);
@@ -18,11 +19,10 @@ export default function CriarTicket() {
 
   const navigate = useNavigate();
 
-
   const salvarDados = async (e) => {
     e.preventDefault();
 
-    if (!prioridade || !status || !tecnico) {
+    if (!email || !prioridade || !status || !tecnico) {
       alert("Preencha todos os campos obrigatórios");
       return;
     }
@@ -30,6 +30,7 @@ export default function CriarTicket() {
     try {
       await addDoc(collection(db, 'tickets'), {
         nome,
+        email,
         problema,
         prioridade: prioridade.value,
         status: status.value,
@@ -61,6 +62,16 @@ export default function CriarTicket() {
         </div>
         <div className="col-md-4">
           <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Digite seu e-mail"
+            required
+          />
+        </div>
+        <div className="col-md-4">
+          <input
             type="text"
             className="form-control"
             value={problema}
@@ -69,6 +80,9 @@ export default function CriarTicket() {
             required
           />
         </div>
+      </div>
+
+      <div className="row g-3 mt-3">
         <div className="col-md-4">
           <Select
             value={prioridade}
@@ -78,9 +92,6 @@ export default function CriarTicket() {
             classNamePrefix="react-select"
           />
         </div>
-      </div>
-
-      <div className="row g-3 mt-3">
         <div className="col-md-4">
           <Select
             value={status}
@@ -99,6 +110,9 @@ export default function CriarTicket() {
             classNamePrefix="react-select"
           />
         </div>
+      </div>
+
+      <div className="row g-3 mt-3">
         <div className="col-md-4">
           <DatePicker
             selected={dataCriacao}

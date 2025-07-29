@@ -26,9 +26,9 @@ export default function TicketsExibicao({
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null);
-
     const columns = useMemo(() => [
         { Header: "Nome", accessor: "nome" },
+        { Header: "Email", accessor: "email" },
         { Header: "Problema", accessor: "problema" },
         {
             Header: "Prioridade",
@@ -114,6 +114,7 @@ export default function TicketsExibicao({
                     <div>
                         <h5>Detalhes do Ticket</h5>
                         <p><strong>Nome:</strong> {selectedTicket.nome}</p>
+                        <p><strong>Email:</strong> {selectedTicket.email}</p>
                         <p><strong>Problema:</strong> {selectedTicket.problema}</p>
                         <p><strong>Prioridade:</strong> {selectedTicket.prioridade}</p>
                         <p><strong>Status:</strong> {selectedTicket.status}</p>
@@ -141,7 +142,7 @@ export default function TicketsExibicao({
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Buscar por nome ou problema..."
+                            placeholder="Buscar por nome, email ou problema..."
                             value={searchInput}
                             onChange={e => setSearchInput(e.target.value)}
                         />
