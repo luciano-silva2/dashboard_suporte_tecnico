@@ -1,13 +1,16 @@
+import React, { Suspense, lazy } from "react";
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 import Sidebar from './Components/Sidebar/Sidebar';
 import Home from "./Pages/Home/Home";
-import Tickets from "./Pages/Tickets/Tickets";
 import Chat from './Chat/Chat';
 import Login from './Login/Login';
 import { Routes, Route } from "react-router-dom";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './Firebase/firebase';
+
+const Tickets = lazy(() => import("./Pages/Tickets/Tickets"));
+const CriarTicket = lazy(() => import("./Pages/Tickets/CriarTicket"));
 
 function App() {
   const [user] = useAuthState(auth);
