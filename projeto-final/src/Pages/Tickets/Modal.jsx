@@ -13,8 +13,9 @@ const Modal = ({ isOpen, onClose, children }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 2000,
       }}
-      onClick={onClose} // Close modal on backdrop click
+      onClick={onClose}
     >
       <div
         style={{
@@ -22,8 +23,10 @@ const Modal = ({ isOpen, onClose, children }) => {
           padding: '20px',
           borderRadius: '8px',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          position: 'relative',
+          zIndex: 2001,
         }}
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal content
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
         <button onClick={onClose}>Close</button>
