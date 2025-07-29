@@ -1,47 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { collection, onSnapshot, Firestore, addDoc } from "firebase/firestore"
-import { firestore } from "../../../Firebase/firebase.jsx";
+import { collection, onSnapshot, doc, getDoc, query, where } from "firebase/firestore";
+import { auth, firestore } from "../../../Firebase/firebase.jsx";
 import "../../Chat.css";
-function ChatSideBar({ setTicketSelecionado }){
 
-    const [usuarios, setUsuarios] = useState([]);
+function ChatSideBar({ setTicketSelecionado }) {
+  const [tickets, setTickets] = useState([]);
+  const [tipoUsuario, setTipoUsuario] = useState(null);
 
-    
-    const RefTickets = collection(firestore, "tickets");
+  useEffect(() => {
+    async function buscarTipoUsuario() {
+      const usuarioAtual = auth.currentUser;
+      if (!usuarioAtual) return;
 
-    useEffect(() => {
-        const desconectar = onSnapshot(RefTickets, snapshot => {
-            const usuariosCarregados = snapshot.docs.map( doc => ({
-                id : doc.id,
-                ...doc.data()
-            }))
-                // const usuariosUnicos = [
-                //     ...new Map(
-                //         usuariosCarregados.map(u => [u.usuario, u])
-                //     ).values()
-                //     ];
-            setUsuarios(usuariosCarregados);
-        })
-        return () => desconectar();
-    })
-    
+      const docRef = doc(firestore, "usuarios", usuarioAtual.uid);
+      const docSnap = await getDoc(docRef);
 
+      if (docSnap.exists()) {
+        setTipoUsuario(docSnap.data().tipo);
+      }
+    }
 
-    return(
-        <div 
-        className="ChatSideBar">
+    buscarTipoUsuario();
+  }, []);
 
-            <ul className="contatos">
-                {usuarios.map(({ id }) => (
-                    <li key={id} className="contato"
-                    onClick={() => setTicketSelecionado(id)}>
-                        {id}
-                    </li>
-                ))}
-            </ul>
+  useEffect(() => {
+    const usuarioAtual = auth.currentUser;
+    if (!usuarioAtual || !tipoUsuario) return;
 
-        </div>
-    );
+    let q = collection(firestore, "tickets");
+
+    if (tipoUsuario !== "admin") {
+      q = query(q, where("usuario", "==", usuarioAtual.uid));
+    }
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const ticketsFiltrados = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setTickets(ticketsFiltrados);
+    });
+
+    return () => unsub();
+  }, [tipoUsuario]);
+
+  return (
+    <div className="ChatSideBar">
+      <ul className="contatos">
+        {tickets.map(({ id, nome, problema }) => (
+          <li
+            key={id}
+            className="contato"
+            onClick={() => setTicketSelecionado(id)}
+            style={{ cursor: "pointer" }}
+          >
+            {nome || id} - {problema || "Sem descrição"}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default ChatSideBar;
