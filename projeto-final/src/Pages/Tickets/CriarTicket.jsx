@@ -80,6 +80,7 @@ export default function CriarTicket() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu e-mail"
             required
+            readOnly={true}
           />
         </div>
         <div className="col-md-4">
