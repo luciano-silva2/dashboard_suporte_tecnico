@@ -13,6 +13,7 @@ import {
 } from './ticketsUtils';
 import TicketsExibicao from "./TicketsExibicao";
 
+
 export default function Tickets() {
   const navigate = useNavigate();
 
@@ -25,12 +26,14 @@ export default function Tickets() {
   const [filtroDataFinal, setFiltroDataFinal] = useState(null);
   const [filtroTecnico, setFiltroTecnico] = useState(null);
 
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setSearchTerm(searchInput.trim().toLowerCase());
     }, 500);
     return () => clearTimeout(handler);
   }, [searchInput]);
+
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'tickets'), (snapshot) => {
