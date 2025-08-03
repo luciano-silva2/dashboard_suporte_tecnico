@@ -91,6 +91,7 @@ export default function CriarTicket() {
             onChange={(e) => setProblema(e.target.value)}
             placeholder="Descreva o problema"
             required
+            
           />
         </div>
       </div>
