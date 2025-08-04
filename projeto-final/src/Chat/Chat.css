@@ -76,14 +76,21 @@ header div:last-child button{
     align-items: center;
   }
   .ChatAlive{
-    width: 65vw;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .Chat-div{
+    height: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
   }
   .Chat{
     height: 90vh;
     width: 90%;
-    border: 1px solid var(--secondary);
+    
   }
   .login{
     display: flex;
@@ -141,4 +148,29 @@ header div:last-child button{
     text-align: center;
     font-weight: bold;
     font-size: 20px;
+  }
+  .mensagem-chat {
+    display: inline-block;
+    background-color: #30be09;
+    border-radius: 6px;
+    padding: 5px 4px;
+    border: 1px solid #fbf9f9;
+    max-width: 80%;
+    word-break: break-word;
+    white-space: pre-wrap;
+    align-self: flex-end; 
+  }
+
+  .conteudo-msg{
+    .conteudo-msg {
+    height: auto;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  }
+  .msgs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }

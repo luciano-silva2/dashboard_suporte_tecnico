@@ -60,22 +60,26 @@ function ChatAlive({ ticketId }) {
 
         return (
             <div className="ChatAlive">
-                <div className="Chat">
-                    {msgs.map(({ id, usuario, msg }) => (
-                        <div key={id} className="divMsg">
-                            {usuario} : {msg}
+                <div className="Chat-div borda">
+                    <div className="Chat borda">
+                        <div className="msgs">
+                            {msgs.map(({ id, usuario, msg }) => (
+                                <div key={id} className="mensagem-chat">
+                                    <div className="conteudo-msg">{usuario} : {msg}</div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Escreva uma mensagem..."
-                            value={novaMensagem}
-                            onChange={(e) => setNovaMensagem(e.target.value)}
-                        />
-                        <button type="submit">Enviar</button>
-                        {msgs.length}
-                    </form>
+                        <form onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                placeholder="Escreva uma mensagem..."
+                                value={novaMensagem}
+                                onChange={(e) => setNovaMensagem(e.target.value)}
+                            />
+                            <button type="submit">Enviar</button>
+                            {msgs.length}
+                        </form>
+                    </div>
                 </div>
             </div>
         );

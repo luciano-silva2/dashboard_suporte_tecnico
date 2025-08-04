@@ -42,7 +42,7 @@ function Login(){
                                 Bem vindo(a) a assistência tecnica
                             </span>
                             <p>
-                                Escolha com que tipo de conta você gostaria:
+                                Escolha com que tipo de conta você gostaria de logar:
                             </p>
                             
                         </div>
