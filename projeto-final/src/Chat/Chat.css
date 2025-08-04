@@ -174,3 +174,14 @@ header div:last-child button{
     flex-direction: column;
     gap: 5px;
   }
+  .mensagem-chat-outro {
+    display: inline-block;
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 5px 4px;
+    border: 1px solid #fbf9f9;
+    max-width: 80%;
+    word-break: break-word;
+    white-space: pre-wrap;
+    align-self: flex-start; 
+  }

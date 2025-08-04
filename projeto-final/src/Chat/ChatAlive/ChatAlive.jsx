@@ -63,11 +63,21 @@ function ChatAlive({ ticketId }) {
                 <div className="Chat-div borda">
                     <div className="Chat borda">
                         <div className="msgs">
-                            {msgs.map(({ id, usuario, msg }) => (
-                                <div key={id} className="mensagem-chat">
-                                    <div className="conteudo-msg">{usuario} : {msg}</div>
+                            {msgs.map(({ id, usuario, msg }) => {
+                            const souEu = usuario === auth.currentUser?.displayName;
+
+                            return (
+                                <div
+                                key={id}
+                                className={souEu ? "mensagem-chat" : "mensagem-chat-outro"}
+                                >
+                                <div className="conteudo-msg">
+                                    {!souEu && <strong>{usuario}:</strong>}
+                                    {msg}
                                 </div>
-                            ))}
+                                </div>
+                            );
+                            })}
                         </div>
                         <form onSubmit={handleSubmit}>
                             <input
