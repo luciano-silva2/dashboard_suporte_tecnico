@@ -11,7 +11,7 @@ import { auth } from './Firebase/firebase';
 
 const Tickets = lazy(() => import("./Pages/Tickets/Tickets"));
 const CriarTicket = lazy(() => import("./Pages/Tickets/CriarTicket"));
-
+const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 function App() {
   const [user] = useAuthState(auth);
 
@@ -22,15 +22,17 @@ function App() {
           <Header />
           <Sidebar />
           <div style={{ marginLeft: '200px', padding: '2rem' }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/filtros" element={<Home />} />
-              <Route path="/tickets" element={<Tickets />} />
-              <Route path="/configuracoes" element={<Home />} />
-              <Route path="/chat" element={<Chat />} />
-              <Route path="/graficos" element={<Home />} />
-              <Route path="/criar-ticket" element={<CriarTicket />} />
-            </Routes>
+            <Suspense fallback={<div>Carregando...</div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/filtros" element={<Home />} />
+                <Route path="/tickets" element={<Tickets />} />
+                <Route path="/configuracoes" element={<Home />} />
+                <Route path="/chat" element={<Chat />} />
+                <Route path="/graficos" element={<Dashboard />} /> {}
+                <Route path="/criar-ticket" element={<CriarTicket />} />
+              </Routes>
+            </Suspense>
           </div>
           <Footer />
         </>
