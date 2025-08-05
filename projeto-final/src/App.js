@@ -6,17 +6,20 @@ import Home from "./Pages/Home/Home";
 import Chat from './Chat/Chat';
 import Login from './Login/Login';
 import { Routes, Route } from "react-router-dom";
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './Firebase/firebase';
+import { UserProvider } from './context/UserContext';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Tickets = lazy(() => import("./Pages/Tickets/Tickets"));
 const CriarTicket = lazy(() => import("./Pages/Tickets/CriarTicket"));
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
+
 function App() {
   const [user] = useAuthState(auth);
   const [ticketSelecionado, setTicketSelecionado] = useState(null);
+
   return (
-    <>
+    <UserProvider>
       {user ? (
         <>
           <Header />
@@ -26,11 +29,13 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/filtros" element={<Home />} />
-                <Route path="/tickets" element={<Tickets setTicketSelecionado = {setTicketSelecionado} />} />
+                <Route path="/tickets" element={<Tickets setTicketSelecionado={setTicketSelecionado} />} />
                 <Route path="/configuracoes" element={<Home />} />
-                <Route path="/chat" element={<Chat ticketSelecionado = {ticketSelecionado}
-                  setTicketSelecionado = {setTicketSelecionado}/>} />
-                <Route path="/graficos" element={<Dashboard />} /> {}
+                <Route path="/chat" element={<Chat 
+                  ticketSelecionado={ticketSelecionado}
+                  setTicketSelecionado={setTicketSelecionado} 
+                />} />
+                <Route path="/graficos" element={<Dashboard />} />
                 <Route path="/criar-ticket" element={<CriarTicket />} />
               </Routes>
             </Suspense>
@@ -40,7 +45,7 @@ function App() {
       ) : (
         <Login />
       )}
-    </>
+    </UserProvider>
   );
 }
 

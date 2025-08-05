@@ -3,69 +3,60 @@ import { MaterialReactTable } from 'material-react-table';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { exportarCSV, prioridades, statusOptions, tecnicos } from './ticketsUtils';
+import { exportarCSV, prioridades, statusOptions } from './ticketsUtils';
 import Modal from "./Modal";
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { firestore } from '../../Firebase/firebase'; // ajuste o caminho conforme seu projeto
+import AtenderTicketButton from "./AtenderTicketButton";
+import { auth, db } from '../../Firebase/firebase';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export default function TicketsExibicao({
     setTicketSelecionado,
     navigate,
-    searchInput,
-    setSearchInput,
-    filtroStatus,
-    setFiltroStatus,
-    filtroPrioridade,
-    setFiltroPrioridade,
-    filtroDataInicial,
-    setFiltroDataInicial,
-    filtroDataFinal,
-    setFiltroDataFinal,
-    filtroTecnico,
-    setFiltroTecnico,
     ticketsFiltrados,
     atualizarCampo,
     excluirTicket,
-    onTicketCriado, // novo callback para atualizar lista no pai
+    isFuncionario,
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [novoTicket, setNovoTicket] = useState({
+        nome: '',
+        email: '',
+        problema: '',
+        prioridade: null,
+        status: null,
+        tecnico: '',
+        data: new Date(),
+    });
 
-    // Novo estado para criação
-    const [novoNome, setNovoNome] = useState('');
-    const [novoEmail, setNovoEmail] = useState('');
-    const [novoProblema, setNovoProblema] = useState('');
-    const [novaPrioridade, setNovaPrioridade] = useState(null);
-    const [novoStatus, setNovoStatus] = useState(null);
-    const [novoTecnico, setNovoTecnico] = useState('');
-    const [novaData, setNovaData] = useState(new Date());
+    const abrirModalNovoTicket = () => {
+        setSelectedTicket(null);
+        const user = auth.currentUser;
+        setNovoTicket({
+            nome: user?.displayName || '',
+            email: user?.email || '',
+            problema: '',
+            prioridade: null,
+            status: null,
+            tecnico: '',
+            data: new Date(),
+        });
+        setIsModalOpen(true);
+    };
 
-    // Função salvar novo ticket
     const salvarNovoTicket = async () => {
         try {
-            const docRef = await addDoc(collection(firestore, 'tickets'), {
-                nome: novoNome,
-                email: novoEmail,
-                problema: novoProblema,
-                prioridade: novaPrioridade ? novaPrioridade.value : null,
-                status: novoStatus ? novoStatus.value : null,
-                tecnico: novoTecnico,
-                data: novaData || serverTimestamp(),
+            await addDoc(collection(db, 'tickets'), {
+                ...novoTicket,
+                prioridade: novoTicket.prioridade?.value || null,
+                status: novoTicket.status?.value || null,
+                data: novoTicket.data || serverTimestamp(),
             });
             alert('Ticket criado com sucesso!');
             setIsModalOpen(false);
-            // Limpar campos
-            setNovoNome('');
-            setNovoEmail('');
-            setNovoProblema('');
-            setNovaPrioridade(null);
-            setNovoStatus(null);
-            setNovoTecnico('');
-            setNovaData(new Date());
-            if (onTicketCriado) onTicketCriado(); // informa o componente pai para atualizar
-        } catch (error) {
-            console.error('Erro ao criar ticket:', error);
-            alert('Erro ao criar ticket');
+        } catch (e) {
+            console.error(e);
+            alert('Erro ao criar ticket.');
         }
     };
 
@@ -124,26 +115,30 @@ export default function TicketsExibicao({
                         Excluir
                     </button>
                     <button
-                    className="btn btn-primary btn-sm"
-                    onClick={ () => {
-                        setTicketSelecionado(row.original);
-                        navigate("/chat");
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                            setTicketSelecionado(row.original);
+                            navigate("/chat");
                         }}
                     >
                         Abrir Chat
                     </button>
+                    {isFuncionario && row.original.status === "aberto" && !row.original.funcionarioId && (
+                        <AtenderTicketButton
+                            ticket={row.original}
+                            currentUser={auth.currentUser}
+                            isFuncionario={isFuncionario}
+                            onAfter={() => {}}
+                        />
+                    )}
                 </div>
             )
         },
-    ], [atualizarCampo, excluirTicket]);
+    ], [atualizarCampo, excluirTicket, isFuncionario]);
 
     return (
         <div className="container my-4">
-            {/* Modal de detalhes */}
-            <Modal isOpen={isModalOpen && selectedTicket !== null} onClose={() => {
-                setIsModalOpen(false);
-                setSelectedTicket(null);
-            }}>
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 {selectedTicket ? (
                     <div>
                         <h5>Detalhes do Ticket</h5>
@@ -155,72 +150,49 @@ export default function TicketsExibicao({
                         <p><strong>Técnico:</strong> {selectedTicket.tecnico}</p>
                         <p><strong>Data:</strong> {selectedTicket.data?.toLocaleDateString()}</p>
                     </div>
-                ) : null}
+                ) : (
+                    <div>
+                        <h5>Criar Novo Ticket</h5>
+                        <input
+                            className="form-control mb-2"
+                            placeholder="Problema"
+                            value={novoTicket.problema}
+                            onChange={e => setNovoTicket({...novoTicket, problema: e.target.value})}
+                        />
+                        <Select
+                            options={prioridades}
+                            value={novoTicket.prioridade}
+                            onChange={opt => setNovoTicket({...novoTicket, prioridade: opt})}
+                            placeholder="Prioridade"
+                            classNamePrefix="react-select"
+                        />
+                        <Select
+                            options={statusOptions}
+                            value={novoTicket.status}
+                            onChange={opt => setNovoTicket({...novoTicket, status: opt})}
+                            placeholder="Status"
+                            classNamePrefix="react-select"
+                        />
+                        <input
+                            className="form-control mt-2"
+                            placeholder="Técnico"
+                            value={novoTicket.tecnico}
+                            onChange={e => setNovoTicket({...novoTicket, tecnico: e.target.value})}
+                        />
+                        <DatePicker
+                            selected={novoTicket.data}
+                            onChange={date => setNovoTicket({...novoTicket, data: date})}
+                            className="form-control mt-2"
+                            dateFormat="dd/MM/yyyy"
+                        />
+                        <button className="btn btn-primary mt-3" onClick={salvarNovoTicket}>Salvar</button>
+                    </div>
+                )}
             </Modal>
 
-            {/* Modal de criar novo ticket */}
-            <Modal isOpen={isModalOpen && selectedTicket === null} onClose={() => setIsModalOpen(false)}>
-                <h5>Criar Novo Ticket</h5>
-                <div className="mb-3">
-                    <label>Nome</label>
-                    <input type="text" className="form-control" value={novoNome} onChange={e => setNovoNome(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label>Email</label>
-                    <input type="email" className="form-control" value={novoEmail} onChange={e => setNovoEmail(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label>Problema</label>
-                    <textarea className="form-control" value={novoProblema} onChange={e => setNovoProblema(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label>Prioridade</label>
-                    <Select
-                        options={prioridades}
-                        value={novaPrioridade}
-                        onChange={setNovaPrioridade}
-                        classNamePrefix="react-select"
-                        isClearable
-                    />
-                </div>
-                <div className="mb-3">
-                    <label>Status</label>
-                    <Select
-                        options={statusOptions}
-                        value={novoStatus}
-                        onChange={setNovoStatus}
-                        classNamePrefix="react-select"
-                        isClearable
-                    />
-                </div>
-                <div className="mb-3">
-                    <label>Técnico</label>
-                    <input type="text" className="form-control" value={novoTecnico} onChange={e => setNovoTecnico(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label>Data</label>
-                    <DatePicker selected={novaData} onChange={setNovaData} className="form-control" dateFormat="dd/MM/yyyy" />
-                </div>
-                <button className="btn btn-primary" onClick={salvarNovoTicket}>Salvar</button>
-                <button className="btn btn-secondary ms-2" onClick={() => setIsModalOpen(false)}>Cancelar</button>
-            </Modal>
-
-            <div className="d-flex justify-content-end mb-3">
-                <button className="btn btn-success" onClick={() => {
-                    setSelectedTicket(null);
-                    setIsModalOpen(true);
-                }}>
-                    + Novo Ticket
-                </button>
-            </div>
-
-            <div className="d-flex justify-content-end mb-3">
+            <div className="d-flex justify-content-between mb-3">
+                <button className="btn btn-success" onClick={abrirModalNovoTicket}>+ Novo Ticket</button>
                 <button className="btn btn-danger" onClick={() => exportarCSV(ticketsFiltrados)}>Exportar CSV</button>
-            </div>
-
-            <div className="mb-4 p-3 border rounded bg-light shadow-sm">
-                {/* Seus filtros */}
-                {/* ... seu código dos filtros igual ao seu original ... */}
             </div>
 
             <MaterialReactTable

@@ -1,21 +1,15 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../Firebase/firebase';
-import {
-  collection,
-  onSnapshot,
-  deleteDoc,
-  doc,
-  updateDoc,
-} from 'firebase/firestore';
-import {
-  filtrarTickets
-} from './ticketsUtils';
+import { collection, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { filtrarTickets } from './ticketsUtils';
 import TicketsExibicao from "./TicketsExibicao";
+import { useUser } from "../../context/UserContext";
 
-
-export default function Tickets( { setTicketSelecionado } ) {
+export default function Tickets({ setTicketSelecionado }) {
   const navigate = useNavigate();
+  const { userData } = useUser();
+  const isFuncionario = userData?.tipo === "funcionario";
 
   const [tickets, setTickets] = useState([]);
   const [searchInput, setSearchInput] = useState('');
@@ -26,14 +20,12 @@ export default function Tickets( { setTicketSelecionado } ) {
   const [filtroDataFinal, setFiltroDataFinal] = useState(null);
   const [filtroTecnico, setFiltroTecnico] = useState(null);
 
-
   useEffect(() => {
     const handler = setTimeout(() => {
       setSearchTerm(searchInput.trim().toLowerCase());
     }, 500);
     return () => clearTimeout(handler);
   }, [searchInput]);
-
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'tickets'), (snapshot) => {
@@ -78,23 +70,12 @@ export default function Tickets( { setTicketSelecionado } ) {
 
   return (
     <TicketsExibicao
-      setTicketSelecionado = {setTicketSelecionado}
+      setTicketSelecionado={setTicketSelecionado}
       navigate={navigate}
-      searchInput={searchInput}
-      setSearchInput={setSearchInput}
-      filtroStatus={filtroStatus}
-      setFiltroStatus={setFiltroStatus}
-      filtroPrioridade={filtroPrioridade}
-      setFiltroPrioridade={setFiltroPrioridade}
-      filtroDataInicial={filtroDataInicial}
-      setFiltroDataInicial={setFiltroDataInicial}
-      filtroDataFinal={filtroDataFinal}
-      setFiltroDataFinal={setFiltroDataFinal}
-      filtroTecnico={filtroTecnico}
-      setFiltroTecnico={setFiltroTecnico}
       ticketsFiltrados={ticketsFiltrados}
       atualizarCampo={atualizarCampo}
       excluirTicket={excluirTicket}
+      isFuncionario={isFuncionario}
     />
   );
 }
