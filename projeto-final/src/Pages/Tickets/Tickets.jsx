@@ -14,7 +14,7 @@ import {
 import TicketsExibicao from "./TicketsExibicao";
 
 
-export default function Tickets() {
+export default function Tickets( { setTicketSelecionado } ) {
   const navigate = useNavigate();
 
   const [tickets, setTickets] = useState([]);
@@ -78,6 +78,7 @@ export default function Tickets() {
 
   return (
     <TicketsExibicao
+      setTicketSelecionado = {setTicketSelecionado}
       navigate={navigate}
       searchInput={searchInput}
       setSearchInput={setSearchInput}

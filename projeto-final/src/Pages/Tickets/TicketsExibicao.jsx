@@ -9,6 +9,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { firestore } from '../../Firebase/firebase'; // ajuste o caminho conforme seu projeto
 
 export default function TicketsExibicao({
+    setTicketSelecionado,
     navigate,
     searchInput,
     setSearchInput,
@@ -121,6 +122,15 @@ export default function TicketsExibicao({
                         onClick={() => excluirTicket(row.original.id)}
                     >
                         Excluir
+                    </button>
+                    <button
+                    className="btn btn-primary btn-sm"
+                    onClick={ () => {
+                        setTicketSelecionado(row.original);
+                        navigate("/chat");
+                        }}
+                    >
+                        Abrir Chat
                     </button>
                 </div>
             )

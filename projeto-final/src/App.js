@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 import Sidebar from './Components/Sidebar/Sidebar';
@@ -14,7 +14,7 @@ const CriarTicket = lazy(() => import("./Pages/Tickets/CriarTicket"));
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 function App() {
   const [user] = useAuthState(auth);
-
+  const [ticketSelecionado, setTicketSelecionado] = useState(null);
   return (
     <>
       {user ? (
@@ -26,9 +26,10 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/filtros" element={<Home />} />
-                <Route path="/tickets" element={<Tickets />} />
+                <Route path="/tickets" element={<Tickets setTicketSelecionado = {setTicketSelecionado} />} />
                 <Route path="/configuracoes" element={<Home />} />
-                <Route path="/chat" element={<Chat />} />
+                <Route path="/chat" element={<Chat ticketSelecionado = {ticketSelecionado}
+                  setTicketSelecionado = {setTicketSelecionado}/>} />
                 <Route path="/graficos" element={<Dashboard />} /> {}
                 <Route path="/criar-ticket" element={<CriarTicket />} />
               </Routes>
