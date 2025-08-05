@@ -9,9 +9,9 @@ import { useState } from "react";
 
 
 
-function Chat(){
+function Chat({ ticketSelecionado, setTicketSelecionado}){
 
-  const [ticketSelecionado, setTicketSelecionado] = useState(null)
+  
 
   return(
     <div>
