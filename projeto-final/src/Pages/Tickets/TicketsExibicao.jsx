@@ -117,7 +117,6 @@ export default function TicketsExibicao({
                     <button
                         className="btn btn-primary btn-sm"
                         onClick={() => {
-                            setTicketSelecionado(row.original);
                             navigate("/chat");
                         }}
                     >

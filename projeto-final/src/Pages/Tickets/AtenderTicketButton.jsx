@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
-import { db } from "../../Firebase/firebase";
+import { firestore } from "../../Firebase/firebase";
 
 export default function AtenderTicketButton({ ticket, currentUser, isFuncionario, onAfter }) {
   const [loading, setLoading] = useState(false);
@@ -15,9 +15,9 @@ export default function AtenderTicketButton({ ticket, currentUser, isFuncionario
     setLoading(true);
 
     try {
-      const ref = doc(db, "tickets", ticket.id);
+      const ref = doc(firestore, "tickets", ticket.id);
 
-      await runTransaction(db, async (tx) => {
+      await runTransaction(firestore, async (tx) => {
         const snap = await tx.get(ref);
         if (!snap.exists()) throw new Error("Ticket não encontrado.");
         const data = snap.data();
