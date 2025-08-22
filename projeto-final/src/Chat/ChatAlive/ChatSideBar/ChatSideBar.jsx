@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { firestore } from "../../../Firebase/firebase.jsx";
+import { firestore, auth } from "../../../Firebase/firebase.jsx";
 import "../../Chat.css";
 
 function ChatSideBar({ setTicketSelecionado }) {
@@ -18,10 +18,26 @@ function ChatSideBar({ setTicketSelecionado }) {
         return () => unsubscribe();
     }, []);
 
+    const usuarioUid = auth.currentUser?.uid;
+    const usuarioEmail = auth.currentUser?.email;
+
+    // Aqui filtramos os tickets para mostrar apenas os que pertencem ao usuário
+    const ticketsFiltrados = tickets.filter(ticket => {
+        if (!auth.currentUser) return false;
+
+        // Cliente só vê tickets que criou
+        if (ticket.email && ticket.email === usuarioEmail) return true;
+
+        // Funcionário só vê tickets que está associado
+        if (ticket.funcionarioId && ticket.funcionarioId === usuarioUid) return true;
+
+        return false;
+    });
+
     return (
         <div className="ChatSideBar">
             <ul className="contatos">
-                {tickets.map(({ id, nome, status }) => (
+                {ticketsFiltrados.map(({ id, nome, status }) => (
                     <li key={id} className="contato" onClick={() => setTicketSelecionado(id)}>
                         {nome} - {status}
                     </li>
