@@ -9,3 +9,7 @@ git add .
 git commit -m "mensagem de alteração"
 git push origin alunox
 ```
+
+```
+Para abrir o servidor não precisa mais entrar na pasta, 
+apenas digite na pasta principal "node server.js"
