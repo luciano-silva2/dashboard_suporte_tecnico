@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { GoogleAuthProvider, signInWithPopup, signInAnonymously } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, firestore } from "../Firebase/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom"; 
+import socket from "../socket/socket.js"; 
 
 function Login() {
-    const [modo, setModo] = useState(false); // false = cliente, true = funcionário
+    const [modo, setModo] = useState(false);
+    const navigate = useNavigate();
 
     const loginGoogle = async () => {
         try {
@@ -30,32 +33,12 @@ function Login() {
                 console.log("Usuário já cadastrado");
             }
 
+            // Avisa o servidor que o usuário está online, enviando apenas o e-mail
+            socket.emit("join", { email: usuario.email });
+
+            navigate("/chat");
         } catch (erro) {
             console.error("Erro no login com Google:", erro);
-        }
-    };
-
-    const loginAnonimo = async () => {
-        try {
-            const resultado = await signInAnonymously(auth);
-            const usuario = resultado.user;
-
-            const docRef = doc(firestore, "usuarios", usuario.uid);
-            const docSnap = await getDoc(docRef);
-
-            if (!docSnap.exists()) {
-                await setDoc(docRef, {
-                    tipo: modo ? "funcionario" : "cliente",
-                    anonimo: true,
-                    criadoEm: new Date()
-                });
-                console.log("Usuário anônimo registrado");
-            } else {
-                console.log("Usuário anônimo já existe");
-            }
-
-        } catch (erro) {
-            console.error("Erro no login anônimo:", erro);
         }
     };
 
@@ -85,13 +68,6 @@ function Login() {
                             className="login-button"
                         >
                             Login com o Google
-                        </button>
-
-                        <button
-                            onClick={loginAnonimo}
-                            className="login-button"
-                        >
-                            Entrar como Anônimo
                         </button>
                     </div>
                 </div>

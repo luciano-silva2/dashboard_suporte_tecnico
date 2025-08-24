@@ -9,8 +9,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { prioridades, statusOptions, tecnicos } from './ticketsUtils';
 
 export default function CriarTicket() {
-  const [nome, setNome] = useState('Antony');
-  const [email, setEmail] = useState('');
+  const [nome, setNome] = useState(auth.currentUser?.displayName || "Anônimo");
+  const [email, setEmail] = useState(auth.currentUser.email);
   const [problema, setProblema] = useState('');
   const [prioridade, setPrioridade] = useState(null);
   const [status, setStatus] = useState(null);

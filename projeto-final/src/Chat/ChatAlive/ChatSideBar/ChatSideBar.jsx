@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestore, auth } from "../../../Firebase/firebase.jsx";
-import socket from "../../../socket/socket.js"; // This is correct
+import socket from "../../../socket/socket.js";
 import "../../Chat.css";
 
 function ChatSideBar({ setTicketSelecionado }) {
@@ -11,27 +11,30 @@ function ChatSideBar({ setTicketSelecionado }) {
 
     const ticketsRef = collection(firestore, "tickets");
 
-    // Escuta login/logout do Firebase só para ter o usuário atual
+    // Escuta mudanças de autenticação para ter o usuário atual
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
+        const unsubscribeAuth = auth.onAuthStateChanged((user) => {
             setUsuario(user);
         });
-        return () => unsubscribe();
+        return () => unsubscribeAuth();
     }, []);
 
-    // Escuta usuários online vindos do socket
+    // Escuta a lista de usuários online vinda do servidor (eventos de join/disconnect)
     useEffect(() => {
-        socket.on("usuariosOnline", (usuarios) => {
+        const handleUsersOnline = (usuarios) => {
             setUsuariosOnline(usuarios);
-        });
+        };
+
+        socket.on("usuariosOnline", handleUsersOnline);
+        
         return () => {
-            socket.off("usuariosOnline");
+            socket.off("usuariosOnline", handleUsersOnline);
         };
     }, []);
 
-    // Monitora tickets do Firebase
+    // Monitora os tickets em tempo real no Firestore
     useEffect(() => {
-        const unsubscribe = onSnapshot(ticketsRef, snapshot => {
+        const unsubscribe = onSnapshot(ticketsRef, (snapshot) => {
             const dados = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
@@ -39,9 +42,9 @@ function ChatSideBar({ setTicketSelecionado }) {
             setTickets(dados);
         });
         return () => unsubscribe();
-    }, []);
+    }, [ticketsRef]);
 
-    // Filtra tickets que o usuário pode ver
+    // Filtra os tickets que o usuário pode visualizar
     const ticketsFiltrados = tickets.filter(ticket => {
         if (!usuario) return false;
         if (ticket.email && ticket.email === usuario.email) return true;
@@ -52,8 +55,9 @@ function ChatSideBar({ setTicketSelecionado }) {
     return (
         <div className="ChatSideBar">
             <ul className="contatos">
-                {ticketsFiltrados.map(({ id, nome, status, funcionarioId }) => {
-                    const estaOnline = usuario && funcionarioId && funcionarioId !== usuario.uid && usuariosOnline.includes(funcionarioId);
+                {ticketsFiltrados.map(({ id, nome, status, funcionarioId, email }) => {
+                    // VERIFICA AGORA PELO E-MAIL que o servidor está enviando
+                    const estaOnline = usuario && funcionarioId && funcionarioId !== usuario.uid && usuariosOnline.includes(email);
                     return (
                         <li 
                             key={id} 

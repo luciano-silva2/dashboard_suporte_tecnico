@@ -14,11 +14,42 @@ const io = new Server(server, { cors: { origin: "*", methods: ["GET", "POST"] } 
 // Rota API
 app.get("/api/hello", (req, res) => res.json({ message: "Olá" }));
 
-// Socket.io
+// Lista para rastrear os usuários online usando o e-mail como chave
+const onlineUsers = new Map();
+
 io.on("connection", socket => {
-  console.log("Usuário conectado:", socket.id);
+  console.log("Conexão de socket estabelecida:", socket.id);
+
+  // Evento para quando um usuário entra
+  socket.on("join", (userData) => {
+    // Adiciona o usuário ao Map de usuários online usando o EMAIL como chave
+    onlineUsers.set(userData.email, socket.id); 
+
+    // Adição para mostrar o email no console do servidor
+    console.log(`Usuário: ${userData.email} conectado com ID: ${socket.id}`);
+
+    // Envia a lista atualizada de EMAILS para todos os clientes
+    io.emit("usuariosOnline", Array.from(onlineUsers.keys()));
+  });
+  
+  // Evento de desconexão
+  socket.on("disconnect", () => {
+    console.log("Socket desconectado:", socket.id);
+
+    // Encontra e remove o usuário do Map pelo socket.id
+    for (let [email, socketId] of onlineUsers.entries()) {
+        if (socketId === socket.id) {
+            console.log(`Usuário: ${email} desconectado.`);
+            onlineUsers.delete(email);
+            break;
+        }
+    }
+
+    // Envia a lista atualizada de EMAILS para todos os clientes
+    io.emit("usuariosOnline", Array.from(onlineUsers.keys()));
+  });
+
   socket.on("mensagem", data => io.emit("mensagem", data));
-  socket.on("disconnect", () => console.log("Usuário desconectado:", socket.id));
 });
 
 // Serve React static files from the build directory within the `projeto-final` subfolder.

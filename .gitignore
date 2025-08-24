@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+ See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 node_modules/
 node_modules*
@@ -13,6 +13,7 @@ node_modules
 
 # production
 /build
+/projeto-final/build*
 
 # misc
 .DS_Store
