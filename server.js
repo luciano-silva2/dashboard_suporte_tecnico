@@ -26,7 +26,7 @@ io.on("connection", socket => {
     onlineUsers.set(userData.email, socket.id); 
 
     // Adição para mostrar o email no console do servidor
-    console.log(`Usuário: ${userData.email} conectado com ID: ${socket.id}`);
+    console.log(`Usuário: ${userData.email}|${userData.idUsuario} conectado com ID: ${socket.id}`);
 
     // Envia a lista atualizada de EMAILS para todos os clientes
     io.emit("usuariosOnline", Array.from(onlineUsers.keys()));

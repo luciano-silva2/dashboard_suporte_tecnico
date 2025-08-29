@@ -9,6 +9,8 @@ import { Routes, Route } from "react-router-dom";
 import { auth } from './Firebase/firebase';
 import { UserProvider } from './context/UserContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { ToastContainer, toast, Flip } from 'react-toastify';
+import socket from "./socket/socket.js"; 
 
 const Tickets = lazy(() => import("./Pages/Tickets/Tickets"));
 const CriarTicket = lazy(() => import("./Pages/Tickets/CriarTicket"));
@@ -17,7 +19,7 @@ const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 function App() {
   const [user] = useAuthState(auth);
   const [ticketSelecionado, setTicketSelecionado] = useState(null);
-
+  const notify = () => toast('Wow so easy !');
   return (
     <UserProvider>
       {user ? (
@@ -41,6 +43,19 @@ function App() {
             </Suspense>
           </div>
           <Footer />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition={Flip}
+          />
         </>
       ) : (
         <Login />

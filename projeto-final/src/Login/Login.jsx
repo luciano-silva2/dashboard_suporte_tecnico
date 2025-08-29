@@ -3,7 +3,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, firestore } from "../Firebase/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"; 
-import socket from "../socket/socket.js"; 
+import socket from "../socket/socket.js"
 
 function Login() {
     const [modo, setModo] = useState(false);
@@ -34,7 +34,11 @@ function Login() {
             }
 
             // Avisa o servidor que o usuário está online, enviando apenas o e-mail
-            socket.emit("join", { email: usuario.email });
+
+            socket.emit("join", { 
+                email: usuario.email,
+                idUsuario : usuario.uid
+            });
 
             navigate("/chat");
         } catch (erro) {

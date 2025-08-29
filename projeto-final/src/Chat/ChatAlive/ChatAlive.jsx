@@ -3,6 +3,8 @@ import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from 
 import { firestore } from "../../Firebase/firebase";
 import { auth } from "../../Firebase/firebase";
 
+import socket from "../../socket/socket.js"
+
 function ChatAlive({ ticketId }) {
     const [novaMensagem, setNovaMensagem] = useState("");
     const [msgs, setMsgs] = useState([]);
@@ -41,7 +43,11 @@ function ChatAlive({ ticketId }) {
         } catch (e) {
             console.error("Erro ao enviar mensagem: ", e);
         }
-
+        socket.emit("mensagem", {
+            destinatarioEmail: "aqui_vai_o_email_do_destinatario",
+            remetente: auth.currentUser?.displayName || "Anônimo",
+            msg: novaMensagem
+        })
         setNovaMensagem("");
     };
 
