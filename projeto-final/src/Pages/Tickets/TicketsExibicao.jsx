@@ -22,6 +22,8 @@ export default function TicketsExibicao({
     const [novoTicket, setNovoTicket] = useState({
         nome: '',
         email: '',
+        clienteId: null,
+        funcionarioId: null,
         problema: '',
         prioridade: null,
         status: null,
@@ -30,11 +32,13 @@ export default function TicketsExibicao({
     });
 
     const abrirModalNovoTicket = () => {
-        setSelectedTicket(null);
         const user = auth.currentUser;
+        setSelectedTicket(null);
         setNovoTicket({
             nome: user?.displayName || '',
             email: user?.email || '',
+            clienteId: user?.uid || null,
+            funcionarioId: null,
             problema: '',
             prioridade: null,
             status: null,
@@ -51,6 +55,7 @@ export default function TicketsExibicao({
                 prioridade: novoTicket.prioridade?.value || null,
                 status: novoTicket.status?.value || null,
                 data: novoTicket.data || serverTimestamp(),
+                clienteId: novoTicket.clienteId || auth.currentUser?.uid,
             });
             alert('Ticket criado com sucesso!');
             setIsModalOpen(false);
@@ -116,9 +121,7 @@ export default function TicketsExibicao({
                     </button>
                     <button
                         className="btn btn-primary btn-sm"
-                        onClick={() => {
-                            navigate("/chat");
-                        }}
+                        onClick={() => navigate("/chat")}
                     >
                         Abrir Chat
                     </button>
@@ -184,7 +187,13 @@ export default function TicketsExibicao({
                             className="form-control mt-2"
                             dateFormat="dd/MM/yyyy"
                         />
-                        <button className="btn btn-primary mt-3" onClick={salvarNovoTicket}>Salvar</button>
+                        <button
+                            type="button"
+                            className="btn btn-primary mt-3"
+                            onClick={salvarNovoTicket}
+                        >
+                            Salvar
+                        </button>
                     </div>
                 )}
             </Modal>

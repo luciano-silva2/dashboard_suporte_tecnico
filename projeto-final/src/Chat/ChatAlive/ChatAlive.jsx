@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
 import { firestore } from "../../Firebase/firebase";
 import { auth } from "../../Firebase/firebase";
-
+import { useUser } from "../../context/UserContext.jsx";
 import socket from "../../socket/socket.js"
 
 function ChatAlive({ ticketId }) {
     const [novaMensagem, setNovaMensagem] = useState("");
     const [msgs, setMsgs] = useState([]);
-
+    const { usuario } = useUser();
     useEffect(() => {
         if (!ticketId) return;
 

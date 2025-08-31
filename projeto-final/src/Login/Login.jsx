@@ -4,6 +4,7 @@ import { auth, firestore } from "../Firebase/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom"; 
 import socket from "../socket/socket.js"
+import useUser from "../context/UserContext.jsx"
 
 function Login() {
     const [modo, setModo] = useState(false);

@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
 import { firestore } from "../../Firebase/firebase";
+import {useUser} from "../../context/UserContext";
 
 export default function AtenderTicketButton({ ticket, currentUser, isFuncionario, onAfter }) {
   const [loading, setLoading] = useState(false);
-
+  const usuario = useUser();
   // Calcula se o botão deve aparecer
   const podeAtender = useMemo(() => {
     return isFuncionario && ticket?.status === "aberto" && !ticket?.funcionarioId;
@@ -26,6 +27,7 @@ export default function AtenderTicketButton({ ticket, currentUser, isFuncionario
 
         tx.update(ref, {
           funcionarioId: currentUser.uid,
+          tecnico: currentUser.displayName, 
           status: "em_andamento",
           assumidoEm: serverTimestamp(),
           atualizadoEm: serverTimestamp(),

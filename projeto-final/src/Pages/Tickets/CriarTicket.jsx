@@ -1,51 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from '../../Firebase/firebase';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useUser } from "../../context/UserContext";
 
-import { prioridades, statusOptions, tecnicos } from './ticketsUtils';
+import { prioridades, statusOptions } from './ticketsUtils';
 
 export default function CriarTicket() {
-  const [nome, setNome] = useState(auth.currentUser?.displayName || "Anônimo");
-  const [email, setEmail] = useState(auth.currentUser.email);
   const [problema, setProblema] = useState('');
   const [prioridade, setPrioridade] = useState(null);
   const [status, setStatus] = useState(null);
-  const [tecnico, setTecnico] = useState(null);
   const [dataCriacao, setDataCriacao] = useState(new Date());
 
+  const usuario = useUser(); // pega user do auth + dados extras
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setNome(user.displayName || "Usuário sem nome");
-      setEmail(user.email || "");
-    }
-  }, []);
-
-
-
 
   const salvarDados = async (e) => {
     e.preventDefault();
 
-    if (!email || !prioridade || !status || !tecnico) {
+    const user = auth.currentUser;
+
+    if (!user?.email || !prioridade || !status) {
       alert("Preencha todos os campos obrigatórios");
       return;
     }
 
     try {
       await addDoc(collection(db, 'tickets'), {
-        nome,
-        email,
+        nome: usuario.userData?.nome || user.displayName || "Usuário sem nome",
+        email: user.email,
         problema,
         prioridade: prioridade.value,
+        clienteId: user.uid,     // 🔑 garantido
+        tecnico: null,
+        funcionarioId: null,
         status: status.value,
-        tecnico: tecnico.value,
         data: Timestamp.fromDate(dataCriacao),
       });
 
@@ -54,7 +46,6 @@ export default function CriarTicket() {
     } catch (erro) {
       console.error("Erro ao criar ticket:", erro);
     }
-    console.log(auth)
   };
 
   return (
@@ -65,22 +56,16 @@ export default function CriarTicket() {
           <input
             type="text"
             className="form-control"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            placeholder="Digite seu nome"
-            required
-            readOnly={true}
+            value={usuario.userData?.nome || auth.currentUser?.displayName || ""}
+            readOnly
           />
         </div>
         <div className="col-md-4">
           <input
             type="email"
             className="form-control"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Digite seu e-mail"
-            required
-            readOnly={true}
+            value={auth.currentUser?.email || ""}
+            readOnly
           />
         </div>
         <div className="col-md-4">
@@ -91,7 +76,6 @@ export default function CriarTicket() {
             onChange={(e) => setProblema(e.target.value)}
             placeholder="Descreva o problema"
             required
-            
           />
         </div>
       </div>
@@ -112,15 +96,6 @@ export default function CriarTicket() {
             onChange={setStatus}
             options={statusOptions}
             placeholder="Status"
-            classNamePrefix="react-select"
-          />
-        </div>
-        <div className="col-md-4">
-          <Select
-            value={tecnico}
-            onChange={setTecnico}
-            options={tecnicos}
-            placeholder="Técnico responsável"
             classNamePrefix="react-select"
           />
         </div>
