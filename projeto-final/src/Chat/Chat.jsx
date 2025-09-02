@@ -14,14 +14,12 @@ function Chat({ ticketSelecionado, setTicketSelecionado}){
   
 
   return(
-    <div>
-        <div className="ChatContainer">
-          <>
-          <ChatSideBar setTicketSelecionado={ setTicketSelecionado } />
-          {ticketSelecionado && <ChatAlive ticketId={ticketSelecionado} />}
-          </>
-        </div>
-    </div>
+      <div className="ChatContainer">
+        <>
+        <ChatSideBar setTicketSelecionado={ setTicketSelecionado } />
+        {ticketSelecionado && <ChatAlive ticketId={ticketSelecionado} />}
+        </>
+      </div>
   );
 }
 export default Chat;
