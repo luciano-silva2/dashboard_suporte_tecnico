@@ -78,8 +78,6 @@ function ChatAlive({ ticketId }) {
     return (
         <div className="ChatAlive">
             <div className="Chat-div borda">
-                
-
                 <div className="msgs">
                     {msgs.map(({ id, usuarioNome, msg, tipo }) => {
                         const souEu = usuarioNome === auth.currentUser?.displayName;

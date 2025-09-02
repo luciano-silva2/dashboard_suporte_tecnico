@@ -22,6 +22,7 @@ function ChatSideBar({ setTicketSelecionado }) {
     // Escuta a lista de usuários online vinda do servidor (eventos de join/disconnect)
     useEffect(() => {
         const handleUsersOnline = (usuarios) => {
+            console.log("📡 Usuários online recebidos:", usuarios);
             setUsuariosOnline(usuarios);
         };
 
@@ -44,20 +45,21 @@ function ChatSideBar({ setTicketSelecionado }) {
         return () => unsubscribe();
     }, [ticketsRef]);
 
-    // Filtra os tickets que o usuário pode visualizar
-    const ticketsFiltrados = tickets.filter(ticket => {
-        if (!usuario) return false;
-        if (ticket.email && ticket.email === usuario.email) return true;
-        if (ticket.funcionarioId && ticket.funcionarioId === usuario.uid) return true;
-        return false;
-    });
+    
+    
 
     return (
         <div className="ChatSideBar">
             <ul className="contatos">
-                {ticketsFiltrados.map(({ id, nome, status, funcionarioId, email }) => {
-                    // VERIFICA AGORA PELO E-MAIL que o servidor está enviando
-                    const estaOnline = usuario && funcionarioId && funcionarioId !== usuario.uid && usuariosOnline.includes(email);
+                {tickets.map(({ id, nome, status, funcionarioId, clienteId }) => {
+                    let estaOnline = false;
+                    if(usuario.uid === funcionarioId){
+                        estaOnline = usuariosOnline.some(u => u.idUsuario === clienteId);
+                    }
+                    else if(usuario.uid === clienteId){
+                        estaOnline = usuariosOnline.some(u => u.idUsuario === funcionarioId);
+                    }
+                        
                     return (
                         <li 
                             key={id} 

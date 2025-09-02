@@ -23,13 +23,17 @@ io.on("connection", socket => {
   // Evento para quando um usuário entra
   socket.on("join", (userData) => {
     // Adiciona o usuário ao Map de usuários online usando o EMAIL como chave
-    onlineUsers.set(userData.email, socket.id); 
+    onlineUsers.set(userData.email, {
+      socketId: socket.id,
+      idUsuario : userData.idUsuario, 
+      email: userData.email 
+    }); 
 
     // Adição para mostrar o email no console do servidor
     console.log(`Usuário: ${userData.email}|${userData.idUsuario} conectado com ID: ${socket.id}`);
 
     // Envia a lista atualizada de EMAILS para todos os clientes
-    io.emit("usuariosOnline", Array.from(onlineUsers.keys()));
+    io.emit("usuariosOnline", Array.from(onlineUsers.values()));
   });
   
   // Evento de desconexão
@@ -37,16 +41,14 @@ io.on("connection", socket => {
     console.log("Socket desconectado:", socket.id);
 
     // Encontra e remove o usuário do Map pelo socket.id
-    for (let [email, socketId] of onlineUsers.entries()) {
-        if (socketId === socket.id) {
+    for (let [email, data] of onlineUsers.entries()) {
+        if (data.socketId === socket.id) {
             console.log(`Usuário: ${email} desconectado.`);
-            onlineUsers.delete(email);
+            onlineUsers.delete(email)
             break;
         }
     }
-
-    // Envia a lista atualizada de EMAILS para todos os clientes
-    io.emit("usuariosOnline", Array.from(onlineUsers.keys()));
+    io.emit("usuariosOnline", Array.from(onlineUsers.values()));
   });
 
   socket.on("mensagem", data => io.emit("mensagem", data));

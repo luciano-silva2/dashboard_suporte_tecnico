@@ -27,7 +27,7 @@ function App() {
     socket.on("mensagem", (data) => {
       // Verifica se a mensagem não foi enviada pelo próprio usuário logado
       if (user && data.remetente !== user.displayName) {
-        toast.info(`Nova mensagem de ${data.remetente}: ${data.msg}`, {
+        toast.info(`${data.remetente}: ${data.msg}`, {
           // Aqui você pode adicionar opções personalizadas para a notificação
           position: "top-right",
           autoClose: 5000,
