@@ -16,13 +16,7 @@
     --accent: #30be09;
   }
 }
-body{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    background: var(--background);
-    color: var(--text);
-}
+
 header{
     width: 100%;
     display: flex;
@@ -51,15 +45,21 @@ header div:last-child button{
     border: none;
     cursor: pointer;
 }
+form{
+  height: 50px;
+  width: 100%;
+
+}
   .ChatSideBar{
-      display: flex;
-      width: 25vw;
-      border: 2px solid var(--secondary);
-      height: 85vh;
-      flex-direction: column;   
+    display: flex;
+    width: 25vw;
+    border: 2px solid var(--secondary);
+    height: 100%;
+    flex-direction: column;   
   }
   .ChatContainer{
     display: flex;
+    height: 90vh;
     width: 100%;
     flex-direction: row;
     justify-content: center;
@@ -86,6 +86,7 @@ header div:last-child button{
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
   }
   .Chat{
     height: 90vh;
@@ -170,6 +171,7 @@ header div:last-child button{
 
   }
   .msgs{
+    height: 85%;
     display: flex;
     flex-direction: column;
     gap: 5px;
