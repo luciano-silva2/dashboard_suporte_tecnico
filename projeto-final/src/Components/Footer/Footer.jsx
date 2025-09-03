@@ -7,7 +7,7 @@ export default function Footer() {
     const borderClass = theme === "light" ? "border-dark" : "border-light";
 
     return (
-        <div className={`text-center p-3 fixed-bottom ${bgClass} ${textClass} ${borderClass} border`}>
+        <div className={`text-center p-3 ${bgClass} ${textClass} ${borderClass} border`}>
             Footer
         </div>
     );

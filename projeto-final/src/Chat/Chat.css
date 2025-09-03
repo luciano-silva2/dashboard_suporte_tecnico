@@ -80,9 +80,11 @@ form{
     height: 100%;
     display: flex;
     justify-content: center;
+    
   }
   .Chat-div{
-    height: 100%;
+    min-height: 100%;
+    display: flex;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -91,7 +93,6 @@ form{
   .Chat{
     height: 90vh;
     width: 90%;
-    
   }
   .login{
     display: flex;
@@ -101,7 +102,6 @@ form{
     align-items: center;
     height: 300px;
     width: 240px;
-    
   }
   .login-button{
     background-color: transparent;
@@ -156,25 +156,28 @@ form{
     border-radius: 6px;
     padding: 5px 4px;
     border: 1px solid #fbf9f9;
+    min-height: 40px;
     max-width: 80%;
     word-break: break-word;
     white-space: pre-wrap;
     align-self: flex-end; 
+    overflow-y: auto;
   }
 
   .conteudo-msg{
-    .conteudo-msg {
     height: auto;
     font-size: 16px;
     line-height: 1.4;
   }
 
-  }
+  
   .msgs{
-    height: 85%;
+    min-height: 80%;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    
+    
   }
   .mensagem-chat-outro {
     display: inline-block;
@@ -183,6 +186,8 @@ form{
     padding: 5px 4px;
     border: 1px solid #fbf9f9;
     max-width: 80%;
+    min-height: 40px;
+    overflow-y: auto;
     word-break: break-word;
     white-space: pre-wrap;
     align-self: flex-start; 

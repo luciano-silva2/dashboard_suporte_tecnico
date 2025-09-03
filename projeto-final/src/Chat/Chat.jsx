@@ -10,9 +10,6 @@ import { useState } from "react";
 
 
 function Chat({ ticketSelecionado, setTicketSelecionado}){
-
-  
-
   return(
       <div className="ChatContainer">
         <>
