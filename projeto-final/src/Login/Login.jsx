@@ -36,12 +36,8 @@ function Login() {
 
             // Avisa o servidor que o usuário está online, enviando apenas o e-mail
 
-            socket.emit("join", { 
-                email: usuario.email,
-                idUsuario : usuario.uid
-            });
-
-            navigate("/chat");
+     
+            
         } catch (erro) {
             console.error("Erro no login com Google:", erro);
         }

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { auth, firestore } from "../Firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import socket from "../socket/socket"; 
 
 const UserContext = createContext();
 
@@ -16,7 +17,15 @@ export function UserProvider({ children }) {
       try {
         const docRef = doc(firestore, "usuarios", userAuth.uid);
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) setUserData(docSnap.data());
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());
+
+
+          socket.emit("join", {
+            email: userAuth.email,
+            idUsuario: userAuth.uid
+          });
+        }
       } catch (err) {
         console.error("Erro ao pegar dados do usuário:", err);
       }

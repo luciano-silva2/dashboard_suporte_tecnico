@@ -4,6 +4,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -34,8 +35,15 @@ io.on("connection", socket => {
 
     // Envia a lista atualizada de EMAILS para todos os clientes
     io.emit("usuariosOnline", Array.from(onlineUsers.values()));
+ 
   });
-  
+     socket.on("logout", (userData) => {
+  if(onlineUsers){
+    onlineUsers.delete(userData.email);
+    console.log(`Usuario ${userData.email} dislogou`)
+    io.emit("usuariosOnline" , Array.from(onlineUsers.values()))
+    } 
+  }) 
   // Evento de desconexão
   socket.on("disconnect", () => {
     console.log("Socket desconectado:", socket.id);
@@ -62,6 +70,9 @@ app.use(express.static(path.join(__dirname, "projeto-final", "build")));
 app.get(/^(?!.*\/api).*$/, (req, res) => {
   res.sendFile(path.join(__dirname, "projeto-final", "build", "index.html"));
 });
+
+
+
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
