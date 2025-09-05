@@ -50,10 +50,10 @@ function App() {
   return (
     <UserProvider>
       {user ? (
-        <>
-          <Header />
+        <div className="app-container">
           <Sidebar />
-          <div style={{ marginLeft: '200px', padding: '2rem' }}>
+          <div className="app-content">
+            <Header />
             <Suspense fallback={<div>Carregando...</div>}>
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -68,8 +68,8 @@ function App() {
                 <Route path="/criar-ticket" element={<CriarTicket />} />
               </Routes>
             </Suspense>
+            <Footer />
           </div>
-          <Footer />
           <ToastContainer
             position="top-right"
             autoClose={5000}
@@ -83,11 +83,12 @@ function App() {
             theme="light"
             transition={Flip}
           />
-        </>
+        </div>
       ) : (
         <Login />
       )}
     </UserProvider>
+
   );
 }
 

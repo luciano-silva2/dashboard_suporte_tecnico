@@ -14,3 +14,5 @@ git push origin alunox
 Para abrir o servidor não precisa mais entrar na pasta, 
 apenas digite na pasta principal "node server.js"
 e dê run na build antes tambem "npm run build" na pasta do react
+GENERATE_SOURCEMAP=false npm run build
+killall node

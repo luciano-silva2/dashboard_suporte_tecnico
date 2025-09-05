@@ -27,6 +27,19 @@
 .App-link {
   color: #61dafb;
 }
+.app-container {
+  display: flex;
+  min-height: 100vh; /* Ocupa a altura toda da tela */
+}
+
+.app-content {
+  flex: 1;           /* Ocupa todo o espaço restante */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column; /* Para que Header, Routes e Footer fiquem empilhados */
+}
+
+
 
 @keyframes App-logo-spin {
   from {
