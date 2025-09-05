@@ -1,10 +1,35 @@
+<<<<<<< HEAD
+import React, { useState } from 'react';
+=======
 import React, { useState, useEffect } from 'react';
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from '../../Firebase/firebase';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+<<<<<<< HEAD
+import { useUser } from "../../context/UserContext";
+
+import { prioridades, statusOptions } from './ticketsUtils';
+
+export default function CriarTicket() {
+  const [problema, setProblema] = useState('');
+  const [prioridade, setPrioridade] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [dataCriacao, setDataCriacao] = useState(new Date());
+
+  const usuario = useUser(); // pega user do auth + dados extras
+  const navigate = useNavigate();
+
+  const salvarDados = async (e) => {
+    e.preventDefault();
+
+    const user = auth.currentUser;
+
+    if (!user?.email || !prioridade || !status) {
+=======
 
 import { prioridades, statusOptions, tecnicos } from './ticketsUtils';
 
@@ -34,18 +59,30 @@ export default function CriarTicket() {
     e.preventDefault();
 
     if (!email || !prioridade || !status || !tecnico) {
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
       alert("Preencha todos os campos obrigatórios");
       return;
     }
 
     try {
       await addDoc(collection(db, 'tickets'), {
+<<<<<<< HEAD
+        nome: usuario.userData?.nome || user.displayName || "Usuário sem nome",
+        email: user.email,
+        problema,
+        prioridade: prioridade.value,
+        clienteId: user.uid,     // 🔑 garantido
+        tecnico: null,
+        funcionarioId: null,
+        status: status.value,
+=======
         nome,
         email,
         problema,
         prioridade: prioridade.value,
         status: status.value,
         tecnico: tecnico.value,
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
         data: Timestamp.fromDate(dataCriacao),
       });
 
@@ -54,7 +91,10 @@ export default function CriarTicket() {
     } catch (erro) {
       console.error("Erro ao criar ticket:", erro);
     }
+<<<<<<< HEAD
+=======
     console.log(auth)
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   };
 
   return (
@@ -65,22 +105,32 @@ export default function CriarTicket() {
           <input
             type="text"
             className="form-control"
+<<<<<<< HEAD
+            value={usuario.userData?.nome || auth.currentUser?.displayName || ""}
+            readOnly
+=======
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             placeholder="Digite seu nome"
             required
             readOnly={true}
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
           />
         </div>
         <div className="col-md-4">
           <input
             type="email"
             className="form-control"
+<<<<<<< HEAD
+            value={auth.currentUser?.email || ""}
+            readOnly
+=======
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Digite seu e-mail"
             required
             readOnly={true}
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
           />
         </div>
         <div className="col-md-4">
@@ -91,7 +141,10 @@ export default function CriarTicket() {
             onChange={(e) => setProblema(e.target.value)}
             placeholder="Descreva o problema"
             required
+<<<<<<< HEAD
+=======
             
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
           />
         </div>
       </div>
@@ -115,6 +168,8 @@ export default function CriarTicket() {
             classNamePrefix="react-select"
           />
         </div>
+<<<<<<< HEAD
+=======
         <div className="col-md-4">
           <Select
             value={tecnico}
@@ -124,6 +179,7 @@ export default function CriarTicket() {
             classNamePrefix="react-select"
           />
         </div>
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
       </div>
 
       <div className="row g-3 mt-3">

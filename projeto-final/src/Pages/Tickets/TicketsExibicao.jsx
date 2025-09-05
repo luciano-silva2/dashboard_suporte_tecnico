@@ -3,14 +3,74 @@ import { MaterialReactTable } from 'material-react-table';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+<<<<<<< HEAD
+import { exportarCSV, prioridades, statusOptions } from './ticketsUtils';
+import Modal from "./Modal";
+import AtenderTicketButton from "./AtenderTicketButton";
+import { auth, db } from '../../Firebase/firebase';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+=======
 import { exportarCSV, prioridades, statusOptions, tecnicos } from './ticketsUtils';
 import Modal from "./Modal";
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { firestore } from '../../Firebase/firebase'; // ajuste o caminho conforme seu projeto
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
 
 export default function TicketsExibicao({
     setTicketSelecionado,
     navigate,
+<<<<<<< HEAD
+    ticketsFiltrados,
+    atualizarCampo,
+    excluirTicket,
+    isFuncionario,
+}) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTicket, setSelectedTicket] = useState(null);
+    const [novoTicket, setNovoTicket] = useState({
+        nome: '',
+        email: '',
+        clienteId: null,
+        funcionarioId: null,
+        problema: '',
+        prioridade: null,
+        status: null,
+        tecnico: '',
+        data: new Date(),
+    });
+
+    const abrirModalNovoTicket = () => {
+        const user = auth.currentUser;
+        setSelectedTicket(null);
+        setNovoTicket({
+            nome: user?.displayName || '',
+            email: user?.email || '',
+            clienteId: user?.uid || null,
+            funcionarioId: null,
+            problema: '',
+            prioridade: null,
+            status: null,
+            tecnico: '',
+            data: new Date(),
+        });
+        setIsModalOpen(true);
+    };
+
+    const salvarNovoTicket = async () => {
+        try {
+            await addDoc(collection(db, 'tickets'), {
+                ...novoTicket,
+                prioridade: novoTicket.prioridade?.value || null,
+                status: novoTicket.status?.value || null,
+                data: novoTicket.data || serverTimestamp(),
+                clienteId: novoTicket.clienteId || auth.currentUser?.uid,
+            });
+            alert('Ticket criado com sucesso!');
+            setIsModalOpen(false);
+        } catch (e) {
+            console.error(e);
+            alert('Erro ao criar ticket.');
+=======
     searchInput,
     setSearchInput,
     filtroStatus,
@@ -66,6 +126,7 @@ export default function TicketsExibicao({
         } catch (error) {
             console.error('Erro ao criar ticket:', error);
             alert('Erro ao criar ticket');
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
         }
     };
 
@@ -124,6 +185,29 @@ export default function TicketsExibicao({
                         Excluir
                     </button>
                     <button
+<<<<<<< HEAD
+                        className="btn btn-primary btn-sm"
+                        onClick={() => navigate("/chat")}
+                    >
+                        Abrir Chat
+                    </button>
+                    {isFuncionario && row.original.status === "aberto" && !row.original.funcionarioId && (
+                        <AtenderTicketButton
+                            ticket={row.original}
+                            currentUser={auth.currentUser}
+                            isFuncionario={isFuncionario}
+                            onAfter={() => {}}
+                        />
+                    )}
+                </div>
+            )
+        },
+    ], [atualizarCampo, excluirTicket, isFuncionario]);
+
+    return (
+        <div className="container my-4">
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+=======
                     className="btn btn-primary btn-sm"
                     onClick={ () => {
                         setTicketSelecionado(row.original);
@@ -144,6 +228,7 @@ export default function TicketsExibicao({
                 setIsModalOpen(false);
                 setSelectedTicket(null);
             }}>
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
                 {selectedTicket ? (
                     <div>
                         <h5>Detalhes do Ticket</h5>
@@ -155,6 +240,59 @@ export default function TicketsExibicao({
                         <p><strong>Técnico:</strong> {selectedTicket.tecnico}</p>
                         <p><strong>Data:</strong> {selectedTicket.data?.toLocaleDateString()}</p>
                     </div>
+<<<<<<< HEAD
+                ) : (
+                    <div>
+                        <h5>Criar Novo Ticket</h5>
+                        <input
+                            className="form-control mb-2"
+                            placeholder="Problema"
+                            value={novoTicket.problema}
+                            onChange={e => setNovoTicket({...novoTicket, problema: e.target.value})}
+                        />
+                        <Select
+                            options={prioridades}
+                            value={novoTicket.prioridade}
+                            onChange={opt => setNovoTicket({...novoTicket, prioridade: opt})}
+                            placeholder="Prioridade"
+                            classNamePrefix="react-select"
+                        />
+                        <Select
+                            options={statusOptions}
+                            value={novoTicket.status}
+                            onChange={opt => setNovoTicket({...novoTicket, status: opt})}
+                            placeholder="Status"
+                            classNamePrefix="react-select"
+                        />
+                        <input
+                            className="form-control mt-2"
+                            placeholder="Técnico"
+                            value={novoTicket.tecnico}
+                            onChange={e => setNovoTicket({...novoTicket, tecnico: e.target.value})}
+                        />
+                        <DatePicker
+                            selected={novoTicket.data}
+                            onChange={date => setNovoTicket({...novoTicket, data: date})}
+                            className="form-control mt-2"
+                            dateFormat="dd/MM/yyyy"
+                        />
+                        <button
+                            type="button"
+                            className="btn btn-primary mt-3"
+                            onClick={salvarNovoTicket}
+                        >
+                            Salvar
+                        </button>
+                    </div>
+                )}
+            </Modal>
+
+            <div className="d-flex justify-content-between mb-3">
+                <button className="btn btn-success" onClick={abrirModalNovoTicket}>+ Novo Ticket</button>
+                <button className="btn btn-danger" onClick={() => exportarCSV(ticketsFiltrados)}>Exportar CSV</button>
+            </div>
+
+=======
                 ) : null}
             </Modal>
 
@@ -223,6 +361,7 @@ export default function TicketsExibicao({
                 {/* ... seu código dos filtros igual ao seu original ... */}
             </div>
 
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
             <MaterialReactTable
                 columns={columns}
                 data={ticketsFiltrados}

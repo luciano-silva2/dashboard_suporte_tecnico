@@ -7,7 +7,11 @@ export default function Footer() {
     const borderClass = theme === "light" ? "border-dark" : "border-light";
 
     return (
+<<<<<<< HEAD
+        <div className={`text-center p-3 ${bgClass} ${textClass} ${borderClass} border`}>
+=======
         <div className={`text-center p-3 fixed-bottom ${bgClass} ${textClass} ${borderClass} border`}>
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
             Footer
         </div>
     );

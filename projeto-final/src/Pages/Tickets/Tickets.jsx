@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../Firebase/firebase';
+<<<<<<< HEAD
+import { collection, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { filtrarTickets } from './ticketsUtils';
+import TicketsExibicao from "./TicketsExibicao";
+import { useUser } from "../../context/UserContext";
+
+export default function Tickets({ setTicketSelecionado }) {
+  const navigate = useNavigate();
+  const { userData } = useUser();
+  const isFuncionario = userData?.tipo === "funcionario";
+=======
 import {
   collection,
   onSnapshot,
@@ -16,6 +27,7 @@ import TicketsExibicao from "./TicketsExibicao";
 
 export default function Tickets( { setTicketSelecionado } ) {
   const navigate = useNavigate();
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
 
   const [tickets, setTickets] = useState([]);
   const [searchInput, setSearchInput] = useState('');
@@ -26,7 +38,10 @@ export default function Tickets( { setTicketSelecionado } ) {
   const [filtroDataFinal, setFiltroDataFinal] = useState(null);
   const [filtroTecnico, setFiltroTecnico] = useState(null);
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   useEffect(() => {
     const handler = setTimeout(() => {
       setSearchTerm(searchInput.trim().toLowerCase());
@@ -34,7 +49,10 @@ export default function Tickets( { setTicketSelecionado } ) {
     return () => clearTimeout(handler);
   }, [searchInput]);
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'tickets'), (snapshot) => {
       const dados = snapshot.docs.map(doc => ({
@@ -78,6 +96,17 @@ export default function Tickets( { setTicketSelecionado } ) {
 
   return (
     <TicketsExibicao
+<<<<<<< HEAD
+      setTicketSelecionado={setTicketSelecionado}
+      navigate={navigate}
+      ticketsFiltrados={ticketsFiltrados}
+      atualizarCampo={atualizarCampo}
+      excluirTicket={excluirTicket}
+      isFuncionario={isFuncionario}
+    />
+  );
+}
+=======
       setTicketSelecionado = {setTicketSelecionado}
       navigate={navigate}
       searchInput={searchInput}
@@ -98,3 +127,4 @@ export default function Tickets( { setTicketSelecionado } ) {
     />
   );
 }
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
