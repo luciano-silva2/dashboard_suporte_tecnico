@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestore, auth } from "../../../Firebase/firebase.jsx";
 import socket from "../../../socket/socket.js";
@@ -71,6 +72,49 @@ function ChatSideBar({ setTicketSelecionado }) {
                     );
                 })}
             </ul>
+=======
+import { collection, onSnapshot, Firestore, addDoc } from "firebase/firestore"
+import { firestore } from "../../../Firebase/firebase.jsx";
+import "../../Chat.css";
+function ChatSideBar({ setTicketSelecionado }){
+
+    const [usuarios, setUsuarios] = useState([]);
+
+    
+    const RefTickets = collection(firestore, "tickets");
+
+    useEffect(() => {
+        const desconectar = onSnapshot(RefTickets, snapshot => {
+            const usuariosCarregados = snapshot.docs.map( doc => ({
+                id : doc.id,
+                ...doc.data()
+            }))
+                // const usuariosUnicos = [
+                //     ...new Map(
+                //         usuariosCarregados.map(u => [u.usuario, u])
+                //     ).values()
+                //     ];
+            setUsuarios(usuariosCarregados);
+        })
+        return () => desconectar();
+    })
+    
+
+
+    return(
+        <div 
+        className="ChatSideBar">
+
+            <ul className="contatos">
+                {usuarios.map(({ id }) => (
+                    <li key={id} className="contato"
+                    onClick={() => setTicketSelecionado(id)}>
+                        {id}
+                    </li>
+                ))}
+            </ul>
+
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
         </div>
     );
 }

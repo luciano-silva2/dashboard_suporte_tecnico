@@ -8,9 +8,13 @@ git pull origin main
 git add .
 git commit -m "mensagem de alteração"
 git push origin alunox
+<<<<<<< HEAD
 ```
 
 ```
 Para abrir o servidor não precisa mais entrar na pasta, 
 apenas digite na pasta principal "node server.js"
 e dê run na build antes tambem "npm run build" na pasta do react
+=======
+```
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386

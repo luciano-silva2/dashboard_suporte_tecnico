@@ -10,8 +10,11 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< HEAD
     "cors": "^2.8.5",
     "express": "^5.1.0",
+=======
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
     "file-saver": "^2.0.5",
     "firebase": "^11.10.0",
     "json2csv": "^6.0.0-alpha.2",
@@ -28,8 +31,11 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.10.2",
     "recharts": "^3.1.1",
+<<<<<<< HEAD
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+=======
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -16,7 +16,17 @@
     --accent: #30be09;
   }
 }
+<<<<<<< HEAD
 
+=======
+body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background: var(--background);
+    color: var(--text);
+}
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
 header{
     width: 100%;
     display: flex;
@@ -45,6 +55,7 @@ header div:last-child button{
     border: none;
     cursor: pointer;
 }
+<<<<<<< HEAD
 form{
   height: 50px;
   width: 100%;
@@ -60,6 +71,17 @@ form{
   .ChatContainer{
     display: flex;
     height: 90vh;
+=======
+  .ChatSideBar{
+      display: flex;
+      width: 25vw;
+      border: 2px solid var(--secondary);
+      height: 85vh;
+      flex-direction: column;   
+  }
+  .ChatContainer{
+    display: flex;
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
     width: 100%;
     flex-direction: row;
     justify-content: center;
@@ -77,6 +99,7 @@ form{
   }
   .ChatAlive{
     width: 100%;
+<<<<<<< HEAD
     height: 90vh;
     display: flex;
     justify-content: center;
@@ -89,10 +112,25 @@ form{
     display: flex;
     justify-content: center;
     flex-direction: column;
+=======
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .Chat-div{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   }
   .Chat{
     height: 90vh;
     width: 90%;
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   }
   .login{
     display: flex;
@@ -102,6 +140,10 @@ form{
     align-items: center;
     height: 300px;
     width: 240px;
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   }
   .login-button{
     background-color: transparent;
@@ -163,11 +205,16 @@ form{
   }
 
   .conteudo-msg{
+<<<<<<< HEAD
+=======
+    .conteudo-msg {
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
     height: auto;
     font-size: 16px;
     line-height: 1.4;
   }
 
+<<<<<<< HEAD
   
   .msgs{
     flex: 1;
@@ -177,6 +224,13 @@ form{
     overflow-y: auto;
     
     
+=======
+  }
+  .msgs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+>>>>>>> 6df865f689c64060e6f3dc33df31493d295c8386
   }
   .mensagem-chat-outro {
     display: inline-block;
